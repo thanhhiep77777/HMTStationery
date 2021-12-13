@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace HMTStationery.Controllers
 {
+    [Authorize(Roles ="Employee")]
     public class HomeController : Controller
     {
         public ActionResult Index()
