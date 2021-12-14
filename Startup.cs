@@ -1,4 +1,7 @@
-﻿using Microsoft.Owin;
+﻿using HMTStationery.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(HMTStationery.Startup))]
@@ -9,6 +12,8 @@ namespace HMTStationery
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            
         }
+       
     }
 }
