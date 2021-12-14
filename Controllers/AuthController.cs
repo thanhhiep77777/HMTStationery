@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
+using HMTStationery.General;
 
 namespace HMTStationery.Controllers
 {
@@ -44,6 +45,10 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
+                    UserStatic.Email = user.Email;
+                    UserStatic.Name = user.Name;
+                    UserStatic.ID = user.ID;
+                    UserStatic.IsAuthenticated = true;
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
@@ -62,7 +67,7 @@ namespace HMTStationery.Controllers
 
                      HttpContext.GetOwinContext().Authentication.SignIn(
                        new AuthenticationProperties { IsPersistent = false }, ident);
-                    return Redirect($"~/{returnUrl??""}"); // auth succeed 
+                    return Redirect($"~/{returnUrl??role}"); // auth succeed 
                 }
             }
             return View();
