@@ -10,6 +10,13 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@using (Html.BeginForm("Index", "Stationery", FormMethod.Get)) {
+    <p>
+        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)    
+        <input type="submit" value="search" />
+    </p>
+    <p/>
+}
 <table class="table">
     <tr>
         <th>

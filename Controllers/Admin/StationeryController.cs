@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HMTStationery.Models;
+using PagedList;
 
 namespace HMTStationery.Controllers.Admin
 {
@@ -14,11 +15,45 @@ namespace HMTStationery.Controllers.Admin
     {
         HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
         // GET: Stationery
-        public ActionResult Index()
+        public ActionResult Index(string SearchString)
         {
-            var lstStat = db.Stationeries.ToList();
+            //var lstStat = db.Stationeries.Where(n => n.Name.Contains(SearchString)).ToList();
+            var lstStat = new List<Stationery>();
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                lstStat = db.Stationeries.Where(n => n.Name.Contains(SearchString)).ToList();
+            }
+            else
+            {
+                lstStat = db.Stationeries.ToList();
+            }
             return View(lstStat);
         }
+        /*public ActionResult Index(string SearchString, string currentFilter, int? page)
+        {
+            var lstStat = new List<Stationery>();
+            if (SearchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                SearchString = currentFilter;
+            }
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                lstStat = db.Stationeries.Where(n => n.Name.Contains(SearchString)).ToList();
+            }
+            else
+            {
+                lstStat = db.Stationeries.ToList();
+            }
+            ViewBag.CurrentFilter = SearchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            lstStat = lstStat.OrderByDescending(n => n.ID).ToList();
+            return View(lstStat.ToPagedList(pageNumber,pageSize));
+        }*/
 
         [HttpGet]
         public ActionResult Create()
