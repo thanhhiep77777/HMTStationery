@@ -376,6 +376,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Stationery\Index.cshtml" />
+    <Content Include="Views\Stationery\Create.cshtml" />
+    <Content Include="Views\Stationery\Details.cshtml" />
+    <Content Include="Views\Stationery\Delete.cshtml" />
+    <Content Include="Views\Stationery\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
