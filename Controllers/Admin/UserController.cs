@@ -11,7 +11,7 @@ using HMTStationery.Models;
 
 namespace HMTStationery.Controllers.Admin
 {
-   [Authorize(Roles ="Admin")]
+   //[Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();

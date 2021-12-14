@@ -1,11 +1,11 @@
 ﻿using HMTStationery.Models;
 using System;
-using System.Collections.Generic;
+
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
-using HMTStationery.Models;
+
 using System.Web.Security;
 using System.Text;
 using Microsoft.AspNet.Identity;
@@ -67,14 +67,18 @@ namespace HMTStationery.Controllers
             }
             return View();
         }
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
         public ActionResult Logout()
         {
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
-        public ActionResult testpw()
+       public ActionResult TestPassword(string email, string pass)
         {
-            return Content(EncryptPassword("123456", "thanhhiep77777@gmail.com"));
+            return Content(EncryptPassword(pass, email));
         }
         public static string EncryptPassword(string password, string saltorusername)
         {
