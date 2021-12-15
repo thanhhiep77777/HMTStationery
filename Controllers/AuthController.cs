@@ -45,10 +45,7 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-                    UserStatic.Email = user.Email;
-                    UserStatic.Name = user.Name;
-                    UserStatic.ID = user.ID;
-                    UserStatic.IsAuthenticated = true;
+                    UserStatic.SetInfomation(User user);
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
