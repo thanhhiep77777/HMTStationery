@@ -22,3 +22,6 @@ select,
 textarea {
     max-width: 280px;
 }
+.data-label{
+    font-weight:bold !important;
+}

@@ -13,6 +13,8 @@ using System.Net;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
 using HMTStationery.General;
+using HMTStationery.App_Start;
+using System.Collections.Generic;
 
 namespace HMTStationery.Controllers
 {
@@ -45,7 +47,7 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-                    UserStatic.SetInfomation(User user);
+
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
@@ -53,8 +55,8 @@ namespace HMTStationery.Controllers
                           new Claim(ClaimTypes.NameIdentifier, email),
                           new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
 
-                          new Claim(ClaimTypes.Name,email),
-
+                          new Claim(ClaimTypes.Name,user.Name),
+                          new Claim(ClaimTypes.Email,email),
                           // optionally you could add roles if any
                           new Claim(ClaimTypes.Role, role),
 
@@ -62,11 +64,49 @@ namespace HMTStationery.Controllers
                       },
                       DefaultAuthenticationTypes.ApplicationCookie);
 
-                     HttpContext.GetOwinContext().Authentication.SignIn(
-                       new AuthenticationProperties { IsPersistent = false }, ident);
-                    return Redirect($"~/{returnUrl??role}"); // auth succeed 
+                    HttpContext.GetOwinContext().Authentication.SignIn(
+                      new AuthenticationProperties { IsPersistent = false }, ident);
+                    return Redirect($"~/{returnUrl ?? role}"); // auth succeed 
                 }
             }
+            return View();
+        }
+        [CustomAuthorize(Roles = "Admin,Employee")]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [CustomAuthorize(Roles = "Admin,Employee")]
+        public ActionResult ChangePassword(string Password, string NewPassword)
+        {
+            
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = EncryptPassword(Password, email);
+            User user = db.Users.FirstOrDefault(x => x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Incorect curent password";
+                return View();
+            }
+            else
+            {
+                try
+                {
+                    user.Password = EncryptPassword(NewPassword, email);
+                    db.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    ViewBag.Message = "Unknown error";
+                    return View();
+                }
+
+            }
+            ViewBag.Message = "Password changed successfully";
             return View();
         }
         public ActionResult AccessDenied()
@@ -75,10 +115,10 @@ namespace HMTStationery.Controllers
         }
         public ActionResult Logout()
         {
-            //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            HttpContext.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("Index", "Employee");
         }
-       public ActionResult TestPassword(string email, string pass)
+        public ActionResult TestPassword(string email, string pass)
         {
             return Content(EncryptPassword(pass, email));
         }

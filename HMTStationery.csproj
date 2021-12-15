@@ -178,11 +178,10 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="General\General.cs" />
-    <Compile Include="General\UserStatic.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApplyRequestModel.cs" />
     <Compile Include="Models\HMTStationery.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -198,8 +197,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HMTStationery.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\QA.cs">
       <DependentUpon>HMTStationery.tt</DependentUpon>
     </Compile>
@@ -357,6 +354,9 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Auth\AccessDenied.cshtml" />
+    <Content Include="Views\Employee\QA.cshtml" />
+    <Content Include="Views\Employee\ViewProfile.cshtml" />
+    <Content Include="Views\Auth\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />
