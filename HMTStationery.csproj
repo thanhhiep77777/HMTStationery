@@ -197,6 +197,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HMTStationery.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\IdentityModel.cs" />
     <Compile Include="Models\QA.cs">
       <DependentUpon>HMTStationery.tt</DependentUpon>
     </Compile>
