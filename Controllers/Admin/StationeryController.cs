@@ -16,8 +16,7 @@ namespace HMTStationery.Controllers.Admin
         HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
         // GET: Stationery
         public ActionResult Index(string SearchString)
-        {
-            //var lstStat = db.Stationeries.Where(n => n.Name.Contains(SearchString)).ToList();
+        {            
             var lstStat = new List<Stationery>();
             if (!string.IsNullOrEmpty(SearchString))
             {

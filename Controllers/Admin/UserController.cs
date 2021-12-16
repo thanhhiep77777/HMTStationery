@@ -7,20 +7,31 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HMTStationery.Models;
+using PagedList;
 
 
 namespace HMTStationery.Controllers.Admin
 {
-   //[Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
 
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(string SearchString)
         {
-            var users = db.Users.Include(u => u.Role1);
-            return View(users.ToList());
+            /* var users = db.Users.Include(u => u.Role1);
+             return View(users.ToList());*/
+            var users = new List<User>();
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                users = db.Users.Where(n => n.Name.Contains(SearchString)).ToList();
+            }
+            else
+            {
+                users = db.Users.ToList();
+            }
+            return View(users);
         }
 
         // GET: User/Details/5
@@ -121,7 +132,7 @@ namespace HMTStationery.Controllers.Admin
             db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
+        }        
 
         protected override void Dispose(bool disposing)
         {
