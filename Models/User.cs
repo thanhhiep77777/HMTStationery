@@ -18,7 +18,6 @@ namespace HMTStationery.Models
         public User()
         {
             this.QAs = new HashSet<QA>();
-            this.RequestDetails = new HashSet<RequestDetail>();
             this.Requests = new HashSet<Request>();
         }
     
@@ -32,8 +31,6 @@ namespace HMTStationery.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QA> QAs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RequestDetail> RequestDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
         public virtual Role Role1 { get; set; }

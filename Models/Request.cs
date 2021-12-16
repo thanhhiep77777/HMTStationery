@@ -25,7 +25,6 @@ namespace HMTStationery.Models
         public Nullable<int> SenderID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
-        public string Unit { get; set; }
         public string ReceiverEmail { get; set; }
         public string RequestMessage { get; set; }
     

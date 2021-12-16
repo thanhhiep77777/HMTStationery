@@ -22,7 +22,6 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RequestID" Type="int" />
-          <Property Name="UserID" Type="int" />
           <Property Name="StationeryID" Type="int" />
           <Property Name="Quantity" Type="int" />
           <Property Name="Price" Type="float" />
@@ -36,7 +35,6 @@
           <Property Name="SenderID" Type="int" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Status" Type="int" />
-          <Property Name="Unit" Type="nvarchar" MaxLength="20" />
           <Property Name="ReceiverEmail" Type="nvarchar" MaxLength="200" />
           <Property Name="RequestMessage" Type="nvarchar" MaxLength="200" />
         </EntityType>
@@ -60,6 +58,7 @@
           <Property Name="Stock" Type="int" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -109,18 +108,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RequestDe__UserI__2F10007B">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="RequestDetails" Type="Self.RequestDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RequestDetails">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Requests__Sender__2B3F6F97">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
@@ -164,10 +151,6 @@
             <End Role="Stationeries" EntitySet="Stationeries" />
             <End Role="RequestDetails" EntitySet="RequestDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__RequestDe__UserI__2F10007B" Association="Self.FK__RequestDe__UserI__2F10007B">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="RequestDetails" EntitySet="RequestDetails" />
-          </AssociationSet>
           <AssociationSet Name="FK__Requests__Sender__2B3F6F97" Association="Self.FK__Requests__Sender__2B3F6F97">
             <End Role="Users" EntitySet="Users" />
             <End Role="Requests" EntitySet="Requests" />
@@ -200,13 +183,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RequestID" Type="Int32" />
-          <Property Name="UserID" Type="Int32" />
           <Property Name="StationeryID" Type="Int32" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="Price" Type="Double" />
           <NavigationProperty Name="Request" Relationship="Self.FK__RequestDe__Reque__2E1BDC42" FromRole="RequestDetails" ToRole="Requests" />
           <NavigationProperty Name="Stationery" Relationship="Self.FK__RequestDe__Stati__300424B4" FromRole="RequestDetails" ToRole="Stationeries" />
-          <NavigationProperty Name="User" Relationship="Self.FK__RequestDe__UserI__2F10007B" FromRole="RequestDetails" ToRole="Users" />
         </EntityType>
         <EntityType Name="Request">
           <Key>
@@ -217,7 +198,6 @@
           <Property Name="SenderID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
-          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ReceiverEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="RequestMessage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RequestDetails" Relationship="Self.FK__RequestDe__Reque__2E1BDC42" FromRole="Requests" ToRole="RequestDetails" />
@@ -244,6 +224,7 @@
           <Property Name="Stock" Type="Int32" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RequestDetails" Relationship="Self.FK__RequestDe__Stati__300424B4" FromRole="Stationeries" ToRole="RequestDetails" />
         </EntityType>
         <EntityType Name="User">
@@ -258,7 +239,6 @@
           <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="QAs" Relationship="Self.FK__QA__UserID__32E0915F" FromRole="Users" ToRole="QA" />
-          <NavigationProperty Name="RequestDetails" Relationship="Self.FK__RequestDe__UserI__2F10007B" FromRole="Users" ToRole="RequestDetails" />
           <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__Sender__2B3F6F97" FromRole="Users" ToRole="Requests" />
           <NavigationProperty Name="Role1" Relationship="Self.FK__Users__Role__267ABA7A" FromRole="Users" ToRole="Roles" />
         </EntityType>
@@ -295,18 +275,6 @@
             </Principal>
             <Dependent Role="RequestDetails">
               <PropertyRef Name="StationeryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__RequestDe__UserI__2F10007B">
-          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="RequestDetails" Type="Self.RequestDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RequestDetails">
-              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -353,10 +321,6 @@
             <End Role="Stationeries" EntitySet="Stationeries" />
             <End Role="RequestDetails" EntitySet="RequestDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__RequestDe__UserI__2F10007B" Association="Self.FK__RequestDe__UserI__2F10007B">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="RequestDetails" EntitySet="RequestDetails" />
-          </AssociationSet>
           <AssociationSet Name="FK__Requests__Sender__2B3F6F97" Association="Self.FK__Requests__Sender__2B3F6F97">
             <End Role="Users" EntitySet="Users" />
             <End Role="Requests" EntitySet="Requests" />
@@ -389,7 +353,6 @@
               <MappingFragment StoreEntitySet="RequestDetails">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="RequestID" ColumnName="RequestID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="StationeryID" ColumnName="StationeryID" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
@@ -404,7 +367,6 @@
                 <ScalarProperty Name="SenderID" ColumnName="SenderID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="ReceiverEmail" ColumnName="ReceiverEmail" />
                 <ScalarProperty Name="RequestMessage" ColumnName="RequestMessage" />
               </MappingFragment>
@@ -430,6 +392,7 @@
                 <ScalarProperty Name="Stock" ColumnName="Stock" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

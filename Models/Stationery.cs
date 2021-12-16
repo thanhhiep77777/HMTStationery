@@ -11,8 +11,7 @@ namespace HMTStationery.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class Stationery
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -28,11 +27,9 @@ namespace HMTStationery.Models
         public Nullable<int> Stock { get; set; }
         public string Description { get; set; }
         public Nullable<int> Status { get; set; }
+        public string Unit { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RequestDetail> RequestDetails { get; set; }
-        
-        [NotMapped]
-        public System.Web.HttpPostedFileBase ImageUpload { get; set; }
     }
 }

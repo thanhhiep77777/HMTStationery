@@ -16,13 +16,11 @@ namespace HMTStationery.Models
     {
         public int ID { get; set; }
         public Nullable<int> RequestID { get; set; }
-        public Nullable<int> UserID { get; set; }
         public Nullable<int> StationeryID { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<double> Price { get; set; }
     
         public virtual Request Request { get; set; }
         public virtual Stationery Stationery { get; set; }
-        public virtual User User { get; set; }
     }
 }
