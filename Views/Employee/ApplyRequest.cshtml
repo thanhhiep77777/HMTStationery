@@ -1,0 +1,148 @@
+﻿@model HMTStationery.Models.Request
+
+@{
+    ViewBag.Title = "ApplyRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Apply Request</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Request</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <span class="text-danger">@ViewBag.Message</span>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceiverEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReceiverEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ReceiverEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RequestMessage, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RequestMessage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RequestMessage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Apply" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@* Search box *@
+<div class="nk-block-head wide-md nk-block-head-lg">
+    <div class="nk-block-head-content">
+        <p>Find some stationeries to add to this request</p>
+        <div class="nk-search-box">
+            <div class="form-group">
+                <div class="form-control-wrap d-flex">
+                    <input type="text" class="form-control form-control-lg col-md-10" id="searchBox" placeholder="Search...">
+                    <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
+                </div>
+                <div class="form-group" id="livesearch">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- .nk-block-head -->
+@* Preparing table *@
+<h3>Chosen stationeries</h3>
+<div id="chosen-stationeries"></div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Add Eventlistener for changing staionery quantity
+            $('#chosen-stationeries').on('change', '.quantity-input', function (e) {                
+                e.preventDefault();
+                txtID = e.target.dataset.id;
+                txtQuantity = e.target.value;
+                $.ajax({
+                    url: '/Employee/_UpdateQuantity',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {
+                        ID: txtID,
+                        Quantity: txtQuantity
+                    }
+                }).done(function (data) {
+                    let result = data + '';
+                    if (result.includes('Failed')) {
+                        alert(result);
+                        e.target.value = txtQuantity;
+                    } else {
+                        refreshChosenStationeryList();
+                    }
+                })
+            });
+
+            function refreshChosenStationeryList() {
+                $('#chosen-stationeries').load('/Employee/_LoadChosenStationery');
+            }
+            refreshChosenStationeryList();
+
+            function addEventChooseStationery() {
+                $('.choose-button').click(function (e) {
+                    e.preventDefault();
+                    let txtID = e.target.dataset.id;
+                    $.ajax({
+                        url: '/Employee/_AddStationery',
+                        type: 'POST',
+                        dataType: 'html',
+                        data: {
+                            id: txtID
+                        }
+
+                    }).done(function () {
+                        refreshChosenStationeryList();
+
+                    });
+                });
+            }
+
+            //Clear search box
+            $('.clear-search').click(function () {
+                $('#searchBox').val('');
+                $('#livesearch').html('');
+            })
+            //Search stationeries to add to request
+            $('#searchBox').change(function (e) {
+                e.preventDefault();
+                let txtName = $('#searchBox').val();
+                if (txtName != "") {
+                    $.ajax({
+                        url: '/Employee/_SearchStationery',
+                        type: 'POST',
+                        dataType: 'html',
+                        data: {
+                            name: txtName
+                        }
+                    }).done(function (data) {
+                        $('#livesearch').html(data);
+                        addEventChooseStationery();
+                    });
+                }
+            });
+        })
+    </script>
+}

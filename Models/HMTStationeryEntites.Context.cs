@@ -31,5 +31,7 @@ namespace HMTStationery.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Stationery> Stationeries { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

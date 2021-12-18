@@ -30,6 +30,7 @@ namespace HMTStationery.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(string email, string password, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -99,7 +100,7 @@ namespace HMTStationery.Controllers
                     user.Password = EncryptPassword(NewPassword, email);
                     db.SaveChanges();
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     ViewBag.Message = "Unknown error";
                     return View();

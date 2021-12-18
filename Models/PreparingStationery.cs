@@ -5,8 +5,9 @@ using System.Web;
 
 namespace HMTStationery.Models
 {
-    public class ApplyRequestModel
+    public class PreparingStationery
     {
-        public string MyProperty { get; set; }
+        public Stationery Item { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<HMTStationery.Models.RequestDetail>
+<span class="btn btn-default"><h4>Total:@(Model.Sum(x=>x.Quantity*x.Price))</h4></span>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Stationery.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stationery.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            Subtotal
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stationery.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stationery.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.TextBoxFor(modelItem => item.Quantity,htmlAttributes:new {@class="quantity-input",type="number",data_id=item.Stationery.ID })
+        </td>
+        <td>
+            $@(item.Quantity * item.Price)
+        </td>
+        <td>
+            <button class="btn btn-danger remove-stationery" data-id="@item.ID">Remove</button>
+        </td>
+    </tr>
+}
+</table>

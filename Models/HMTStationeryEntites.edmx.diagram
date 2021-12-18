@@ -16,6 +16,9 @@
         <AssociationConnector Association="HMT_StationeryMntModel.FK__RequestDe__Stati__300424B4" ManuallyRouted="false" />
         <AssociationConnector Association="HMT_StationeryMntModel.FK__Requests__Sender__2B3F6F97" ManuallyRouted="false" />
         <AssociationConnector Association="HMT_StationeryMntModel.FK__Users__Role__267ABA7A" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HMT_StationeryMntModel.Notification" Width="1.5" PointX="5.625" PointY="12.25" />
+        <EntityTypeShape EntityType="HMT_StationeryMntModel.sysdiagram" Width="1.5" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="HMT_StationeryMntModel.FK__Notificat__UserI__403A8C7D" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

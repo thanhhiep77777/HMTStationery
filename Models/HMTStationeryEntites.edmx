@@ -4,7 +4,16 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HMT_StationeryMntModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HMT_StationeryMntModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Notifications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Content" Type="nvarchar" MaxLength="100" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
         <EntityType Name="QA">
           <Key>
             <PropertyRef Name="ID" />
@@ -60,6 +69,16 @@
           <Property Name="Status" Type="int" />
           <Property Name="Unit" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="ID" />
@@ -72,6 +91,18 @@
           <Property Name="Password" Type="varchar" MaxLength="64" />
           <Property Name="Status" Type="int" />
         </EntityType>
+        <Association Name="FK__Notificat__UserI__403A8C7D">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Notifications" Type="Self.Notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Notifications">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__QA__UserID__32E0915F">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="QA" Type="Self.QA" Multiplicity="*" />
@@ -133,12 +164,18 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="HMT_StationeryMntModelStoreContainer">
+          <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QA" EntityType="Self.QA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequestDetails" EntityType="Self.RequestDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Requests" EntityType="Self.Requests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stationeries" EntityType="Self.Stationeries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Notificat__UserI__403A8C7D" Association="Self.FK__Notificat__UserI__403A8C7D">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Notifications" EntitySet="Notifications" />
+          </AssociationSet>
           <AssociationSet Name="FK__QA__UserID__32E0915F" Association="Self.FK__QA__UserID__32E0915F">
             <End Role="Users" EntitySet="Users" />
             <End Role="QA" EntitySet="QA" />
@@ -160,8 +197,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HMT_StationeryMntModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -241,6 +277,7 @@
           <NavigationProperty Name="QAs" Relationship="Self.FK__QA__UserID__32E0915F" FromRole="Users" ToRole="QA" />
           <NavigationProperty Name="Requests" Relationship="Self.FK__Requests__Sender__2B3F6F97" FromRole="Users" ToRole="Requests" />
           <NavigationProperty Name="Role1" Relationship="Self.FK__Users__Role__267ABA7A" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="Notifications" Relationship="HMT_StationeryMntModel.FK__Notificat__UserI__403A8C7D" FromRole="User" ToRole="Notification" />
         </EntityType>
         <Association Name="FK__QA__UserID__32E0915F">
           <End Role="Users" Type="Self.User" Multiplicity="0..1" />
@@ -329,7 +366,45 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Notifications" EntityType="HMT_StationeryMntModel.Notification" />
+          <EntitySet Name="sysdiagrams" EntityType="HMT_StationeryMntModel.sysdiagram" />
+          <AssociationSet Name="FK__Notificat__UserI__403A8C7D" Association="HMT_StationeryMntModel.FK__Notificat__UserI__403A8C7D">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="HMT_StationeryMntModel.FK__Notificat__UserI__403A8C7D" FromRole="Notification" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__Notificat__UserI__403A8C7D">
+          <End Type="HMT_StationeryMntModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="HMT_StationeryMntModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -406,6 +481,27 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="HMT_StationeryMntModel.Notification">
+              <MappingFragment StoreEntitySet="Notifications">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="HMT_StationeryMntModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

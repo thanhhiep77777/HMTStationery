@@ -12,14 +12,12 @@ namespace HMTStationery.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RequestDetail
+    public partial class sysdiagram
     {
-        public int ID { get; set; }
-        public Nullable<int> RequestID { get; set; }
-        public Nullable<int> StationeryID { get; set; }
-        public Nullable<int> Quantity { get; set; }
-        public Nullable<double> Price { get; set; }
-        public virtual Request Request { get; set; }
-        public virtual Stationery Stationery { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

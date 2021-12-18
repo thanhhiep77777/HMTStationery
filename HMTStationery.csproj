@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -47,10 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
@@ -175,6 +174,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\Admin\QAController.cs" />
+    <Compile Include="Controllers\Admin\RolesController.cs" />
     <Compile Include="Controllers\Admin\StationeryController.cs" />
     <Compile Include="Controllers\Admin\UserController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ApplyRequestModel.cs" />
     <Compile Include="Models\HMTStationeryEntites.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -200,6 +200,10 @@
       <DependentUpon>HMTStationeryEntites.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModel.cs" />
+    <Compile Include="Models\Notification.cs">
+      <DependentUpon>HMTStationeryEntites.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreparingStationery.cs" />
     <Compile Include="Models\QA.cs">
       <DependentUpon>HMTStationeryEntites.tt</DependentUpon>
     </Compile>
@@ -213,6 +217,9 @@
       <DependentUpon>HMTStationeryEntites.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Stationery.cs">
+      <DependentUpon>HMTStationeryEntites.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>HMTStationeryEntites.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -360,6 +367,19 @@
     <Content Include="Views\Employee\QA.cshtml" />
     <Content Include="Views\Employee\ViewProfile.cshtml" />
     <Content Include="Views\Auth\ChangePassword.cshtml" />
+    <Content Include="Views\Employee\ApplyRequest.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Delete.cshtml" />
+    <Content Include="Views\Roles\Details.cshtml" />
+    <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\QA\Create.cshtml" />
+    <Content Include="Views\QA\Delete.cshtml" />
+    <Content Include="Views\QA\Details.cshtml" />
+    <Content Include="Views\QA\Edit.cshtml" />
+    <Content Include="Views\QA\Index.cshtml" />
+    <Content Include="Views\Employee\Partial\LiveSearch.cshtml" />
+    <Content Include="Views\Employee\Partial\ChosenStationeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />
@@ -427,10 +447,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

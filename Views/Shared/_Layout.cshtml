@@ -236,7 +236,9 @@
                                 </div><!-- .nk-aside-close -->
                             </div><!-- .nk-aside -->
                             <div class="nk-content-body">
+                                <div class="nk-content-wrap">
                                 @RenderBody()
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,3 +257,4 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
+</html>

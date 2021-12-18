@@ -61,6 +61,7 @@ namespace HMTStationery.Controllers.Admin
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Stationery objStat)
         {
             try
