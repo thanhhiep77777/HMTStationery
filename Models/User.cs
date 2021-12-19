@@ -11,7 +11,10 @@ namespace HMTStationery.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Net.Http;
+    using System.Web.Mvc;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,9 +26,14 @@ namespace HMTStationery.Models
         }
     
         public int ID { get; set; }
+        [Required(ErrorMessage = "Please enter Name")]
         public string Name { get; set; }
         public Nullable<int> SuperiorID { get; set; }
+        [Required(ErrorMessage = "Please select role")]
         public Nullable<int> Role { get; set; }
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [Required(ErrorMessage = "Please enter Email")]
+        [Remote("IsAlreadySigned", "User", HttpMethod = "POST", ErrorMessage = "Email already exists.")]
         public string Email { get; set; }
         public string Password { get; set; }
         public Nullable<int> Status { get; set; }

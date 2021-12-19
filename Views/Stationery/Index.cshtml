@@ -4,192 +4,84 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<h2>Stationery List</h2>
 
-@*
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-*@
-@*<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Image)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Stock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
-    </tr>
+<div class="nk-block">
+    <div class="card card-bordered card-stretch">
+        <div class="card-inner-group">
+            <div class="card-inner position-relative card-tools-toggle">
+                <div class="card-title-group">
+                    <div class="card-tools mr-n1">
+                        <ul class="btn-toolbar gx-1">
+                            @using (Html.BeginForm("Index", "Stationery", FormMethod.Get))
+                            {
+                                <p>
+                                    Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                                    <input type="submit" value="search" />
+                                </p>
+                            }
+                        </ul><!-- .btn-toolbar -->
+                    </div><!-- .card-tools -->
+                </div><!-- .card-title-group -->
+            </div><!-- .card-inner -->
+            <div class="card-inner p-0">
+                <div class="nk-tb-list nk-tb-ulist">
+                    <div class="nk-tb-item nk-tb-head">
+                        <div class="nk-tb-col"><span class="sub-text">Name</span></div>
+                        <div class="nk-tb-col tb-col-mb"><span class="sub-text">Image</span></div>
+                        <div class="nk-tb-col tb-col-xl"><span class="sub-text">Price</span></div>
+                        <div class="nk-tb-col tb-col-xl"><span class="sub-text">Stock</span></div>
+                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Description</span></div>
+                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+                    </div>
+                    <!-- .nk-tb-item -->
+                    @foreach (var item in Model)
+                    {
+                        <div class="nk-tb-item">
+                            <div class="nk-tb-col">
+                                <span class="tb-lead">@Html.DisplayFor(modelItem => item.Name) <span class="dot dot-success d-md-none ml-1"></span></span>
+                            </div>
+                            <div class="nk-tb-col tb-col-mb">
+                                <img src="~/Storage/Images/@item.Image" width="auto" height="150"/>
+                            </div>
+                            <div class="nk-tb-col tb-col-xl">
+                                <span>$@Html.DisplayFor(modelItem => item.Price)</span>
+                            </div>
+                            <div class="nk-tb-col tb-col-xl">
+                                <span>@Html.DisplayFor(modelItem => item.Stock)</span>
+                            </div>
+                            <div class="nk-tb-col tb-col-xl">
+                                <span>@(item.Description.Length>20?item.Description.Substring(0,20)+"...":item.Description)</span>
+                            </div>
+                            <div class="nk-tb-col tb-col-md">
+                                <span class="tb-status text-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                            </div>
+                            <div class="nk-tb-col nk-tb-col-tools">
+                                <ul class="nk-tb-actions gx-1">
+                                    <li>
+                                        <div class="drodown">
+                                            <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <ul class="link-list-opt no-bdr">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-    }
-
-</table>*@
-
-<!-- content@s -->
-<div class="nk-content ">
-    <div class="container wide-xl">
-        <div class="nk-content-inner">
-            <div class="nk-content-body">
-                <div class="nk-content-wrap">
-                    <div class="nk-block-head">
-                        <div class="nk-block-between">
-                            <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Users Lists</h3>
-                                @*<div class="nk-block-des text-soft">
-                                        <p>You have total 2,595 users.</p>
-                                    </div>*@
-                            </div><!-- .nk-block-head-content -->
-                            <div class="nk-block-head-content">
-                                <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
-                                    <div class="toggle-expand-content" data-content="pageMenu">
-                                        <ul class="nk-block-tools g-3">                                            
-                                            <li class="nk-block-tools-opt">
-                                                <div class="drodown">
-                                                    <a href="#" class="dropdown-toggle btn btn-icon btn-primary" data-toggle="dropdown"><em class="icon ni ni-plus"></em></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <ul class="link-list-opt no-bdr">
-                                                            <li><span>@Html.ActionLink("Add Stationary", "Create")</span></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div><!-- .toggle-wrap -->
-                            </div><!-- .nk-block-head-content -->
-                        </div><!-- .nk-block-between -->
-                    </div><!-- .nk-block-head -->
-                    <div class="nk-block">
-                        <div class="card card-bordered card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner position-relative card-tools-toggle">
-                                    <div class="card-title-group">
-                                        <div class="card-tools mr-n1">
-                                            <ul class="btn-toolbar gx-1">
-                                                @using (Html.BeginForm("Index", "Stationery", FormMethod.Get))
-                                                {
-                                                    <p>
-                                                        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-                                                        <input type="submit" value="search" />
-                                                    </p>
-                                                }
-                                            </ul><!-- .btn-toolbar -->
-                                        </div><!-- .card-tools -->
-                                    </div><!-- .card-title-group -->
-                                </div><!-- .card-inner -->
-                                <div class="card-inner p-0">
-                                    <div class="nk-tb-list nk-tb-ulist">
-                                        <div class="nk-tb-item nk-tb-head">
-                                            <div class="nk-tb-col"><span class="sub-text">Stationary</span></div>
-                                            <div class="nk-tb-col tb-col-mb"><span class="sub-text">Image</span></div>
-                                            <div class="nk-tb-col tb-col-xl"><span class="sub-text">Price</span></div>
-                                            <div class="nk-tb-col tb-col-xl"><span class="sub-text">Stock</span></div>
-                                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Description</span></div>
-                                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+                                                    <li>@Html.ActionLink("Details", "Details", new { id = item.ID })</li>
+                                                    <li class="divider"></li>
+                                                    <li>@Html.ActionLink("Edit", "Edit", new { id = item.ID }) </li>
+                                                    <li class="divider"></li>
+                                                    <li>@Html.ActionLink("Delete", "Delete", new { id = item.ID })</li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                        <!-- .nk-tb-item -->
-                                        @foreach (var item in Model)
-                                        {
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col">
-                                            <a href="html/user-details-regular.html">
-                                                <div class="user-card">
-                                                    <div class="user-avatar bg-primary">
-                                                        <span>@item.Name.Split(' ').Aggregate("", (x, y) => x + y[0])</span>
-                                                    </div>
-                                                    <div class="user-info">
-                                                        <span class="tb-lead">@Html.DisplayFor(modelItem => item.Name) <span class="dot dot-success d-md-none ml-1"></span></span>
-                                                        @*<span>@Html.DisplayFor(modelItem => item.Email)</span>*@
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-mb">
-                                            <span class="tb-amount">@Html.DisplayFor(modelItem => item.Image)</span>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-xl">
-                                            <ul class="list-status">
-                                                <li><em class="icon text-success ni ni-check-circle"></em> <span>@Html.DisplayFor(modelItem => item.Price)</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-xl">
-                                            <span>@Html.DisplayFor(modelItem => item.Stock)</span>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-xl">
-                                            <span>@Html.DisplayFor(modelItem => item.Description)</span>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md">
-                                            <span class="tb-status text-success">@Html.DisplayFor(modelItem => item.Status)</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-tools">
-                                            <ul class="nk-tb-actions gx-1">
-                                                <li>
-                                                    <div class="drodown">
-                                                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <ul class="link-list-opt no-bdr">                                                             
-                                                                                                                                
-                                                                <li><em class="icon ni ni-eye"></em><span>@Html.ActionLink("Details", "Details", new { id = item.ID })</span></li>
-                                                                <li class="divider"></li>
-                                                                <li><em class="icon ni ni-repeat"></em><span>@Html.ActionLink("Edit", "Edit", new { id = item.ID }) </span></li>
-                                                                <li class="divider"></li>
-                                                                <li><em class="icon ni ni-user-cross-fill"></em><span> @Html.ActionLink("Delete", "Delete", new { id = item.ID })</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div><!-- .nk-tb-item -->
-                                        }
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
-                            </div><!-- .card-inner-group -->
-                        </div><!-- .card -->
-                    </div><!-- .nk-block -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- content@e -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!-- .nk-tb-item -->
+                    }
+                </div><!-- .nk-tb-list -->
+            </div><!-- .card-inner -->
+        </div><!-- .card-inner-group -->
+    </div><!-- .card -->
+</div><!-- .nk-block -->

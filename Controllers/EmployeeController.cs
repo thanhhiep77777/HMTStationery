@@ -41,7 +41,7 @@ namespace HMTStationery.Controllers
         public ActionResult _SearchStationery(string name)
         {
             List<Stationery> list = db.Stationeries
-                .Where(x => x.Name.Contains(name) && x.Stock > 0 && x.Status == 1).ToList();
+                .Where(x => x.Name.ToLower().Contains(name.ToLower()) && x.Stock > 0 && x.Status == 1).ToList();
             return PartialView("Partial/LiveSearch", list);
         }
         
@@ -102,6 +102,18 @@ namespace HMTStationery.Controllers
             }
             Session["prepare"] = prepare;
             return Json(message, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult _RemoveStationery(int ID)
+        {
+            List<PreparingStationery> prepare = (List<PreparingStationery>)Session["prepare"];
+            int index = isExist(ID);
+            if (index != -1)
+            {
+                prepare.RemoveAt(index);
+                Session["prepare"] = prepare;
+            }
+            return Json("OK");
         }
         private int isExist(int id)
         {

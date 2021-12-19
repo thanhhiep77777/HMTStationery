@@ -48,9 +48,13 @@ namespace HMTStationery.Controllers.Admin
             }
             return View(user);
         }
-        public JsonResult IsEmailAvailable(string Email)
+        //Check available email
+        [HttpPost]
+        public JsonResult IsAlreadySigned(string Email)
         {
-            return Json(!db.Users.Any(x => x.Email == Email), JsonRequestBehavior.AllowGet);
+
+            return Json(db.Users.FirstOrDefault(x => x.Email == Email) == null);
+
         }
         // GET: User/Create
         public ActionResult Create()
@@ -78,7 +82,7 @@ namespace HMTStationery.Controllers.Admin
             ViewBag.Role = new SelectList(db.Roles, "ID", "Name", user.Role);
             return View(user);
         }
-
+        
         // GET: User/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -146,5 +150,6 @@ namespace HMTStationery.Controllers.Admin
             }
             base.Dispose(disposing);
         }
+        
     }
 }

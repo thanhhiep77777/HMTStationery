@@ -28,32 +28,7 @@ namespace HMTStationery.Controllers.Admin
             }
             return View(lstStat);
         }
-        /*public ActionResult Index(string SearchString, string currentFilter, int? page)
-        {
-            var lstStat = new List<Stationery>();
-            if (SearchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                SearchString = currentFilter;
-            }
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                lstStat = db.Stationeries.Where(n => n.Name.Contains(SearchString)).ToList();
-            }
-            else
-            {
-                lstStat = db.Stationeries.ToList();
-            }
-            ViewBag.CurrentFilter = SearchString;
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
-            lstStat = lstStat.OrderByDescending(n => n.ID).ToList();
-            return View(lstStat.ToPagedList(pageNumber,pageSize));
-        }*/
-
+       
         [HttpGet]
         public ActionResult Create()
         {
@@ -64,25 +39,36 @@ namespace HMTStationery.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Create(Stationery objStat)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (objStat.ImageUpload != null)
+                HttpPostedFileBase postedfile = objStat.ImageUpload;
+                Bitmap SocialMedia = new Bitmap(postedfile.InputStream);
+                string ext = Path.GetExtension(postedfile.FileName);
+                string fileName = "";
+                if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif")
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(objStat.ImageUpload.FileName);
-                    string extension = Path.GetExtension(objStat.ImageUpload.FileName);
-                    fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
+                    string uniqueNumber = Guid.NewGuid().ToString();
+                    fileName = uniqueNumber + postedfile.FileName;
+                    SocialMedia.Save(Server.MapPath("~/Storage/Images/" + fileName));
                     objStat.Image = fileName;
-                    objStat.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/images/"), fileName));
-
                 }
-                db.Stationeries.Add(objStat);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                else
+                {
+                    ModelState.AddModelError("", "File type not allowed (Must be jpg,jpeg,png,gif.)");
+                    return View();
+                }
+                try
+                {
+                    db.Stationeries.Add(objStat);
+                    db.SaveChanges();
+                    
+                }
+                catch (Exception)
+                {
+                    return View();
+                }
             }
-            catch (Exception)
-            {
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index");
 
         }
 
@@ -120,45 +106,28 @@ namespace HMTStationery.Controllers.Admin
         [HttpPost]
         public ActionResult Edit(int id,Stationery objsta)
         {
+            string currentImagePath = objsta.Image;
             if (objsta.ImageUpload != null)
             {
                 string fileName = Path.GetFileNameWithoutExtension(objsta.ImageUpload.FileName);
                 string extension = Path.GetExtension(objsta.ImageUpload.FileName);
                 fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
                 objsta.Image = fileName;
-                objsta.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/images/"), fileName));
+                objsta.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Storage/Images/"), fileName));
+                
+                string currentFileName = ("~/Storage/Images/" + currentImagePath);
+                if (currentFileName != null || currentFileName != string.Empty)
+                {
+                    if ((System.IO.File.Exists(currentFileName)))
+                    {
+                        System.IO.File.Delete(currentFileName);
+                    }
 
+                }
             }
             db.Entry(objsta).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
-        /* public ActionResult Create(Stationery objStat)
-         {
-             try
-             {
-                 HttpPostedFileBase postedfile = objStat.ImageUpload;
-                 Bitmap SocialMedia = new Bitmap(postedfile.InputStream);
-                 string ext = Path.GetExtension(postedfile.FileName);
-                 string fileName = "";
-                 if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif")
-                 {
-                     string uniqueNumber = Guid.NewGuid().ToString();
-                     fileName = uniqueNumber + postedfile.FileName;
-                     SocialMedia.Save(Server.MapPath("~/Content/images/" + fileName));
-                     objStat.Image = fileName;
-                     db.Stationeries.Add(objStat);
-                     db.SaveChanges();
-                 }
-                 return RedirectToAction("Index");
-             }                
-             catch (Exception)
-             {
-                 return View();
-             }
-
-         }*/
     }
 }

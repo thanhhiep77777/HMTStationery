@@ -11,6 +11,7 @@ namespace HMTStationery.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web;
 
     public partial class Stationery
@@ -22,16 +23,21 @@ namespace HMTStationery.Models
         }
     
         public int ID { get; set; }
+        [Required(ErrorMessage ="Please enter name")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Please enter price")]
         public Nullable<double> Price { get; set; }
         public string Image { get; set; }
+        [Required(ErrorMessage = "Please enter stock number")]
         public Nullable<int> Stock { get; set; }
+
         public string Description { get; set; }
-        public Nullable<int> Status { get; set; }
+        public Nullable<int> Status { get; set; } = 1;
         public string Unit { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RequestDetail> RequestDetails { get; set; }
+        [Display(Name="Image")]
         public HttpPostedFileBase ImageUpload { get; set; }
     }
 }
