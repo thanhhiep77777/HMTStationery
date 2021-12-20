@@ -57,10 +57,10 @@ namespace HMTStationery.Controllers
         }
         //Check available email
         [HttpPost]
-        public JsonResult IsReciverExist(string Email)
+        public JsonResult IsReciverExist(string ReceiverEmail)
         {
 
-            return Json(db.Users.FirstOrDefault(x => x.Email == Email && x.Role1.Name != "Admin") != null);
+            return Json(db.Users.FirstOrDefault(x => x.Email == ReceiverEmail && x.Role1.Name != "Admin") != null);
 
         }
         [HttpPost]

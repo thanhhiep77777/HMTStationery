@@ -30,9 +30,12 @@ namespace HMTStationery.Models
         public Nullable<int> Status { get; set; }
         [EmailAddress(ErrorMessage ="Email is invalid")]
         [Required(ErrorMessage ="Please enter email")]
-        [Remote("IsEmail")]
+        [Remote("IsReciverExist", "Employee", HttpMethod = "POST", ErrorMessage = "Receiver email is not existed")]
+        [Display(Name ="Receiver email")]
         public string ReceiverEmail { get; set; }
+        [Display(Name = "Request message")]
         public string RequestMessage { get; set; }
+        [Display(Name ="Response message")]
         public string ResponseMessage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
