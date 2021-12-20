@@ -24,7 +24,7 @@ namespace HMTStationery.Models
             this.Requests = new HashSet<Request>();
             this.Notifications = new HashSet<Notification>();
         }
-    
+
         public int ID { get; set; }
         [Required(ErrorMessage = "Please enter Name")]
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace HMTStationery.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public Nullable<int> Status { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QA> QAs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

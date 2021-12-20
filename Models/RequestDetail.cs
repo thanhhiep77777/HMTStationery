@@ -19,6 +19,7 @@ namespace HMTStationery.Models
         public Nullable<int> StationeryID { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<double> Price { get; set; }
+    
         public virtual Request Request { get; set; }
         public virtual Stationery Stationery { get; set; }
     }

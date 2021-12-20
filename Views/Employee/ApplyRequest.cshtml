@@ -23,8 +23,8 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
                         <div class="form-control-wrap">
-                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
@@ -33,6 +33,7 @@
                         @Html.LabelFor(model => model.ReceiverEmail, htmlAttributes: new { @class = "control-label " })
                         <div class="form-control-wrap">
                             @Html.EditorFor(model => model.ReceiverEmail, new { htmlAttributes = new { @class = "form-control" } })
+                            <div id="suggesstion-box"></div>
                             @Html.ValidationMessageFor(model => model.ReceiverEmail, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -45,7 +46,7 @@
                             @Html.ValidationMessageFor(model => model.RequestMessage, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>               
+                </div>
 
                 <div class="col-12">
                     <div class="form-group">
@@ -64,7 +65,7 @@
         <div class="nk-search-box">
             <div class="form-group">
                 <div class="form-control-wrap d-flex">
-                    <input type="text" class="form-control form-control-lg col-md-10" id="searchBox" placeholder="Search...">
+                    <input type="text" class="form-control form-control-lg col-md-10 col-sm-10 col-xs-10" id="searchBox" placeholder="Search...">
                     <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
                 </div>
                 <div class="form-group" id="livesearch">
@@ -77,7 +78,9 @@
 @* Preparing table *@
 <h3>Chosen stationeries</h3>
 <div id="chosen-stationeries"></div>
-
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 @section scripts
 {
     <script type="text/javascript">
@@ -111,21 +114,21 @@
             $('#chosen-stationeries').on('click', '.remove-stationery', function (e) {
                 e.preventDefault();
                 txtID = e.target.dataset.id;
-                
+
                 $.ajax({
                     url: '/Employee/_RemoveStationery',
                     type: 'POST',
                     dataType: 'html',
                     data: {
                         ID: txtID,
-                        
+
                     }
                 }).done(function (data) {
                     refreshChosenStationeryList();
                 })
             });
             //Add Eventlistener for searching staioneries
-            $('#livesearch').on('click', '.choose-button',function (e) {
+            $('#livesearch').on('click', '.choose-button', function (e) {
                 e.preventDefault();
                 let txtID = e.target.dataset.id;
                 $.ajax({
@@ -164,10 +167,13 @@
                         dataType: 'html',
                         data: {
                             name: txtName
-                        }
+                        },
+                        beforeSend: function () {
+                            $("#search-box").css("background", "#FFF url(./Content/images/loading.gif) no-repeat 165px");
+                        },
                     }).done(function (data) {
                         $('#livesearch').html(data);
-                        
+
                     });
                 }
             });

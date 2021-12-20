@@ -21,9 +21,9 @@ namespace HMTStationery.Models
         {
             this.RequestDetails = new HashSet<RequestDetail>();
         }
-    
+
         public int ID { get; set; }
-        [Required(ErrorMessage ="Please enter name")]
+        [Required(ErrorMessage = "Please enter name")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Please enter price")]
         public Nullable<double> Price { get; set; }
@@ -34,10 +34,10 @@ namespace HMTStationery.Models
         public string Description { get; set; }
         public Nullable<int> Status { get; set; } = 1;
         public string Unit { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RequestDetail> RequestDetails { get; set; }
-        [Display(Name="Image")]
+        [Display(Name = "Image")]
         public HttpPostedFileBase ImageUpload { get; set; }
     }
 }
