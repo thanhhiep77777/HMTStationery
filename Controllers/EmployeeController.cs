@@ -90,6 +90,7 @@ namespace HMTStationery.Controllers
             return Json(db.Users.FirstOrDefault(x => x.Email == ReceiverEmail && x.Role1.Name != "Admin") != null);
 
         }
+        //Search stationeries to suggest
         [HttpPost]
         public ActionResult _SearchStationery(string name)
         {
@@ -98,7 +99,7 @@ namespace HMTStationery.Controllers
                 .Take(5).ToList();
             return PartialView("Partial/LiveSearch", list);
         }
-
+        //Load preparing list
         public ActionResult _LoadChosenStationery()
         {
             List<RequestDetail> list = new List<RequestDetail>();
@@ -114,6 +115,7 @@ namespace HMTStationery.Controllers
                 }
             return PartialView("Partial/ChosenStationeries", list);
         }
+        //Add stationery to preparing list
         [HttpPost]
         public JsonResult _AddStationery(int id)
         {
@@ -139,6 +141,7 @@ namespace HMTStationery.Controllers
             }
             return Json(prepare, JsonRequestBehavior.AllowGet);
         }
+        //Update stationery quantity in preparing list
         [HttpPost]
         public JsonResult _UpdateQuantity(int ID, int Quantity)
         {
@@ -157,6 +160,7 @@ namespace HMTStationery.Controllers
             Session["prepare"] = prepare;
             return Json(message, JsonRequestBehavior.AllowGet);
         }
+        //remove stationery from preparing list
         [HttpPost]
         public ActionResult _RemoveStationery(int ID)
         {
@@ -169,6 +173,7 @@ namespace HMTStationery.Controllers
             }
             return Json("OK");
         }
+        //check if stationery is existed in preparing list
         private int isExist(int id)
         {
             List<PreparingStationery> prepare = (List<PreparingStationery>)Session["prepare"];
@@ -177,7 +182,18 @@ namespace HMTStationery.Controllers
                     return i;
             return -1;
         }
-
+        public ActionResult MyRequests()
+        {
+            int ID = (int)Session["ID"];
+            List<Request> list = db.Requests.Where(x=>x.SenderID==ID).ToList();
+            return View(list);
+        }
+        public ActionResult RequestDetail(int ID)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
+            return View(request);
+        }
+        //View profile
         public ActionResult ViewProfile()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;

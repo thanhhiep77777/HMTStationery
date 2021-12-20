@@ -1,0 +1,75 @@
+﻿@model HMTStationery.Models.Request
+
+@{
+    ViewBag.Title = "RequestDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>RequestDetail</h2>
+
+<div>
+    <h4>Request</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceiverEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceiverEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RequestMessage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RequestMessage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResponseMessage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResponseMessage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

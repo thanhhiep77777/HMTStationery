@@ -48,7 +48,8 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-
+                    Session.Add("ID", user.ID);
+                    Session.Add("Name", user.Name);
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
