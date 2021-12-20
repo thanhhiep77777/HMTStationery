@@ -33,7 +33,7 @@ namespace HMTStationery.Controllers
             if (ModelState.IsValid)
             {
                 //get preparing stationeries
-                List<PreparingStationery> prepare = (List<PreparingStationery>)Session["prepare"]??new List<PreparingStationery>();
+                List<PreparingStationery> prepare = (List<PreparingStationery>)Session["prepare"] ?? new List<PreparingStationery>();
                 //get user email
                 var claimsIdentity = User.Identity as ClaimsIdentity;
                 IEnumerable<Claim> claims = claimsIdentity.Claims;
@@ -41,19 +41,46 @@ namespace HMTStationery.Controllers
                 //Check empty preparing stationeries
                 if (prepare.Count == 0)
                 {
-                    ModelState.AddModelError(string.Empty, 
+                    ModelState.AddModelError(string.Empty,
                         "No stationery chosen, please choose some stationery for this request");
                     return View();
                 }
                 //Check eligibillity
-                if (db.Users.First(x => x.Email == email).Role1.Eligibility < prepare.Sum(x => x.Item.Price * x.Quantity))
+                User user = db.Users.First(x => x.Email == email);
+                if (user.Role1.Eligibility < prepare.Sum(x => x.Item.Price * x.Quantity))
+                {
+                    ModelState.AddModelError(string.Empty,
+                        "Eligibility exceeded, try to reduce amount or remove some chosen stationeries");
+                    return View();
+                }
+                //Add request to database
+                try
+                {
+                    request.SenderID = user.ID;
+                    request.Date = DateTime.Now;
+                    request.Status = (int?)General.RequestStatus.WAITING;
+                    foreach(PreparingStationery item in prepare)
+                    {
+                        RequestDetail detail = new RequestDetail();
+                        detail.Price = item.Item.Price;
+                        detail.Quantity = item.Quantity;
+                        detail.StationeryID = item.Item.ID;
+                        request.RequestDetails.Add(detail);
+                    }
+
+                    db.Requests.Add(request);
+                    db.SaveChanges();
+                }
+                catch (Exception)
                 {
 
+                    ModelState.AddModelError(string.Empty,
+                       "Unknown error please try again later");
+                    return View();
                 }
-
             }
 
-            return View();
+            return Redirect("/Employee/MyRequests");
         }
         //Check available email
         [HttpPost]

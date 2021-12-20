@@ -34,6 +34,7 @@ namespace HMTStationery.Models
         [Display(Name ="Receiver email")]
         public string ReceiverEmail { get; set; }
         [Display(Name = "Request message")]
+        [Required(ErrorMessage ="Please enter request message")]
         public string RequestMessage { get; set; }
         [Display(Name ="Response message")]
         public string ResponseMessage { get; set; }
