@@ -239,8 +239,7 @@
           <Property Name="RequestMessage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RequestDetails" Relationship="Self.FK__RequestDe__Reque__2E1BDC42" FromRole="Requests" ToRole="RequestDetails" />
           <NavigationProperty Name="User" Relationship="Self.FK__Requests__Sender__2B3F6F97" FromRole="Requests" ToRole="Users" />
-          <Property Name="ResponseMessage"  Type="String" MaxLength="200" FixedLength="false" Unicode="true"/>
-          <Property Name="ResponseMessage1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ResponseMessage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -440,7 +439,7 @@
           <EntitySetMapping Name="Requests">
             <EntityTypeMapping TypeName="HMT_StationeryMntModel.Request">
               <MappingFragment StoreEntitySet="Requests">
-                <ScalarProperty Name="ResponseMessage1" ColumnName="ResponseMessage" />
+                <ScalarProperty Name="ResponseMessage" ColumnName="ResponseMessage" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="SenderID" ColumnName="SenderID" />
@@ -448,7 +447,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ReceiverEmail" ColumnName="ReceiverEmail" />
                 <ScalarProperty Name="RequestMessage" ColumnName="RequestMessage" />
-                <ScalarProperty Name="ResponseMessage" ColumnName="ResponseMessage" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
