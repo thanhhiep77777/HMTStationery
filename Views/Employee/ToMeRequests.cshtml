@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<HMTStationery.Models.Request>
 @using HMTStationery.General;
 @{
-    ViewBag.Title = "MyRequests";
+    ViewBag.Title = "Request applied to me";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,14 +9,17 @@
     <div class="nk-block-head-sub"><a class="back-to" href="/Employee"><em class="icon ni ni-arrow-left"></em><span>Home</span></a></div>
     <div class="nk-block-between-md g-4">
         <div class="nk-block-head-content">
-            <h2 class="nk-block-title fw-normal">My requests</h2>
+            <h2 class="nk-block-title fw-normal">Request applied to me</h2>
         </div>
     </div>
 </div><!-- .nk-block-head -->
 <table class="table">
     <tr>
         <th>
-            Title
+           Sender Name
+        </th>
+        <th>
+           Sender Email
         </th>
         <th>
             Apply Date
@@ -25,25 +28,16 @@
             @Html.DisplayNameFor(model => model.Status)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReceiverEmail)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.RequestMessage)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ResponseMessage)
-        </th>
-       
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-            <a href="/Employee/RequestDetail/@item.ID">
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
+            <td>@item.User.Name</td>
+            <td>@item.User.Email</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
@@ -51,21 +45,15 @@
                 @((RequestStatus) item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReceiverEmail)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.RequestMessage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ResponseMessage)
+                @Html.ActionLink("Detail", "ToMeRequestDetail", new { id = item.ID }, new { @class = "btn btn-info" })
             </td>
-            
-            <td>
-                @Html.ActionLink("Detail", "RequestDetail", new { id = item.ID },new { @class="btn btn-info"})
-            </td>
-            </a>
         </tr>
 
     }
 
 </table>
+
+

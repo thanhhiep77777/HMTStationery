@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<HMTStationery.Models.RequestDetail>
-<span class="btn btn-default"><h4>Total:@(Model.Sum(x=>x.Quantity*x.Price))</h4></span>
+<h4><span class="btn btn-default">Total:@(Model.Sum(x=>x.Quantity*x.Price))</span></h4>
 <table class="table">
     <tr>
         <th>

@@ -383,6 +383,8 @@
     <Content Include="Views\Employee\Partial\ChosenStationeries.cshtml" />
     <Content Include="Views\Employee\MyRequests.cshtml" />
     <Content Include="Views\Employee\RequestDetail.cshtml" />
+    <Content Include="Views\Employee\ToMeRequests.cshtml" />
+    <Content Include="Views\Employee\ToMeRequestDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />

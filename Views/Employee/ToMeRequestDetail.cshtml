@@ -8,27 +8,37 @@
     <div class="nk-block-head-sub"><a class="back-to" href="/Employee/MyRequests"><em class="icon ni ni-arrow-left"></em><span>My Requests</span></a></div>
     <div class="nk-block-between-md g-4">
         <div class="nk-block-head-content">
-            <h2 class="nk-block-title fw-normal">Request detail</h2>
+            <h2 class="nk-block-title fw-normal">To Me Request Detail</h2>
             <div class="nk-block-des">
-                <p>Your request applied at <span class="text-soft"> @Model.Date</span> <span class="text-primary"></span></p>
+                <p>Applied at <span class="text-soft"> @Model.Date</span> <span class="text-primary"></span></p>
             </div>
-            <div class="nk-block-des">
-                <p>Title: <span class="text-primary">@Model.Title</span></p>
-            </div>
+           
         </div>
         <div class="nk-block-head-content">
             <ul class="nk-block-tools justify-content-md-end g-4 flex-wrap">
 
-                @if (Model.Status == (int)RequestStatus.APPROVED)
+                @if (Model.Status == (int)RequestStatus.WAITING)
                 {
                     <li class="order-md-last">
-                        <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal" data-target="#request-cancel"><em class="icon ni ni-cross"></em><span>Cancel Request</span></a>
+                        <a href="#" class="btn btn-auto btn-dim btn-primary" data-toggle="modal-approve" data-target="#request-approve">
+                            <em class="icon ni ni-check"></em>
+                            <span>Approve Request</span>
+                        </a>
+                    </li>
+                    <li class="order-md-last">
+                        <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal-reject" data-target="#request-reject">
+                            <em class="icon ni ni-cross"></em>
+                            <span>Cancel Request</span>
+                        </a>
                     </li>
                 }
-                else if (Model.Status == (int)RequestStatus.WAITING)
+                else if (Model.Status == (int)RequestStatus.WAITINGCANCEL)
                 {
                     <li class="order-md-last">
-                        <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal" data-target="#request-withdraw"><em class="icon ni ni-cross"></em><span>Withdraw Request</span></a>
+                        <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal" data-target="#request-approve-cancel">
+                        <em class="icon ni ni-cross"></em>
+                        <span>Approve for canceling</span>
+                        </a>
                     </li>
                 }
             </ul>
@@ -56,7 +66,7 @@
                                     <p><span class="text-soft">Total cost</span> $@(Model.RequestDetails.Sum(x=>x.Price*x.Quantity))</p>
                                 </li>
                                 <li class="col-sm-6">
-                                    <p><span class="text-soft">Receiver Email</span> @Model.ReceiverEmail</p>
+                                    <p><span class="text-soft">Sender Email</span> @Model.User.Email</p>
                                 </li>
                                 <li class="col-sm-6">
                                     <p><span class="text-soft">Request Message</span> @Model.RequestMessage</p>

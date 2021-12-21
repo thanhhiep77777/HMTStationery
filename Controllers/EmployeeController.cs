@@ -182,13 +182,37 @@ namespace HMTStationery.Controllers
                     return i;
             return -1;
         }
+        //Request applied by current user
         public ActionResult MyRequests()
         {
-            int ID = (int)Session["ID"];
-            List<Request> list = db.Requests.Where(x=>x.SenderID==ID).ToList();
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
+            int ID = int.Parse(givenName);
+
+            List<Request> list = db.Requests.Where(x=>x.SenderID== ID).ToList();
             return View(list);
         }
+        //Request appplied to current user
+        public ActionResult ToMeRequests()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
+            string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+
+            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email).ToList();
+            return View(list);
+        }
+        //My request detail
         public ActionResult RequestDetail(int ID)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
+            return View(request);
+        }
+
+        //To me request detail
+        public ActionResult ToMeRequestDetail(int ID)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
             return View(request);

@@ -60,6 +60,7 @@ namespace HMTStationery.Controllers
 
                           new Claim(ClaimTypes.Name,user.Name),
                           new Claim(ClaimTypes.Email,email),
+                          new Claim(ClaimTypes.GivenName,user.ID.ToString()),
                           // optionally you could add roles if any
                           new Claim(ClaimTypes.Role, role),
                       },

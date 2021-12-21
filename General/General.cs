@@ -22,7 +22,9 @@ namespace HMTStationery.General
         [Display(Name = "CANCELED")]
         CANCELED = 4,
         [Display(Name = "WITHDRAWED")]
-        WITHDRAWED = 5
+        WITHDRAWED = 5,
+        [Display(Name = "WAITING FOR CANCELING")]
+        WAITINGCANCEL = 6
     }
     public enum UserStatus 
     {
