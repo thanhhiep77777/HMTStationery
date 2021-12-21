@@ -48,8 +48,9 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-                    Session.Add("ID", user.ID);
-                    Session.Add("Name", user.Name);
+                    Session["ID"]= user.ID;
+                    Session["Name"]= user.Name;
+                    Session["Email"]= user.Email;                    
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
@@ -61,8 +62,6 @@ namespace HMTStationery.Controllers
                           new Claim(ClaimTypes.Email,email),
                           // optionally you could add roles if any
                           new Claim(ClaimTypes.Role, role),
-
-
                       },
                       DefaultAuthenticationTypes.ApplicationCookie);
 

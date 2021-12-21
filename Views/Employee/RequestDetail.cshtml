@@ -1,75 +1,178 @@
 ﻿@model HMTStationery.Models.Request
-
+@using HMTStationery.General;
 @{
     ViewBag.Title = "RequestDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="nk-block-head nk-block-head-lg">
+    <div class="nk-block-head-sub"><a class="back-to" href="/Employee/MyRequests"><em class="icon ni ni-arrow-left"></em><span>My Requests</span></a></div>
+    <div class="nk-block-between-md g-4">
+        <div class="nk-block-head-content">
+            <h2 class="nk-block-title fw-normal">Request detail</h2>
+            <div class="nk-block-des">
+                <p>Your request applied at <span class="text-soft"> @Model.Date</span> <span class="text-primary"></span></p>
+            </div>
+            <div class="nk-block-des">
+                <p>Title: <span class="text-primary">@Model.Title</span></p>
+            </div>
+        </div>
+        <div class="nk-block-head-content">
+            <ul class="nk-block-tools justify-content-md-end g-4 flex-wrap">
+                @if (Model.Status == (int?)RequestStatus.APPROVED)
+                {
+                    <li class="order-md-last">
+                        <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal" data-target="#request-cancel"><em class="icon ni ni-cross"></em><span>Cancel Request</span></a>
+                    </li>
+                }
 
-<h2>RequestDetail</h2>
 
-<div>
-    <h4>Request</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+                <li class="order-md-last">
+                    <a href="#" class="btn btn-auto btn-dim btn-danger" data-toggle="modal" data-target="#request-withdraw"><em class="icon ni ni-cross"></em><span>Withdraw Request</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div><!-- .nk-block-head -->
+<div class="nk-block">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-bordered">
+                <div class="card-inner-group">
+                    <div class="card-inner">
+                        <div class="sp-plan-head">
+                            <h6 class="title">Request Details</h6>
+                        </div>
+                        <div class="sp-plan-desc sp-plan-desc-mb">
+                            <ul class="row gx-1">
+                                <li class="col-sm-6">
+                                    <p><span class="text-soft">Send Date</span> @(Model.Date.ToString())</p>
+                                </li>
+                                <li class="col-sm-6">
+                                    <p><span class="text-soft">Status</span>@((RequestStatus) Model.Status)</p>
+                                </li>
+                                <li class="col-sm-6">
+                                    <p><span class="text-soft">Total cost</span> $@(Model.RequestDetails.Sum(x=>x.Price*x.Quantity))</p>
+                                </li>
+                                <li class="col-sm-6">
+                                    <p><span class="text-soft">Receiver Email</span> @Model.ReceiverEmail</p>
+                                </li>
+                                <li class="col-sm-6">
+                                    <p><span class="text-soft">Request Message</span> @Model.RequestMessage</p>
+                                </li>
+                                @if (Model.ResponseMessage != null)
+                                {
+                                    <li class="col-sm-6">
+                                        <p><span class="text-soft">Response Message</span> @Model.ResponseMessage</p>
+                                    </li>
+                                }
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+                            </ul>
+                        </div>
+                    </div><!-- .card-inner -->
+                </div><!-- .card-inner-group -->
+            </div><!-- .card -->
+        </div><!-- .col -->
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
+    </div>
+</div><!-- .nk-block -->
+<div class="nk-block">
+    <div class="card card-bordered">
+        <div class="card-inner card-inner-md">
+            <div class="card-title-group">
+                <h6 class="card-title">Request Stationeries</h6>
 
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
+            </div>
+        </div>
+        <table class="table table-tranx">
+            <thead>
+                <tr class="tb-tnx-head">
+                    <th class="tb-tnx-info">
+                        Name
+                    </th>
+                    <th class="tb-tnx-info">
+                        Description
+                    </th>
+                    <th class="tb-tnx-info">
+                        Image
+                    </th>
+                    <th class="tb-tnx-info">
+                        Price
+                    </th>
+                    <th class="tb-tnx-info">
+                        Quantity
+                    </th>
+                    <th class="tb-tnx-info">
+                        Subtotal
+                    </th>
+                </tr><!-- .tb-tnx-item -->
+            </thead>
+            <tbody>
+                @foreach (var item in Model.RequestDetails)
+                {
+                    <tr class="tb-tnx-item">
+                        <td class="tb-tnx-info">
+                            @item.Stationery.Name
+                        </td>
+                        <td class="tb-tnx-info">
+                            @try
+                            {
+                                item.Stationery.Description.Substring(0, 30) + "...";
+                             }
+                            catch (Exception)
+                            {
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReceiverEmail)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReceiverEmail)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RequestMessage)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RequestMessage)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ResponseMessage)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ResponseMessage)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-
-    </dl>
+                                throw;
+                            }
+                        </td>
+                        <td class="tb-tnx-info">
+                            @item.Stationery.Name
+                        </td>
+                        <td class="tb-tnx-info">
+                            @(item.Price.t().Take(30)+"...")
+                        </td>
+                        <td class="tb-tnx-info">
+                            @item.Stationery.Name
+                        </td>
+                        <td class="tb-tnx-info">
+                            @item.Stationery.Name
+                        </td>
+                    </tr><!-- .tb-tnx-item -->
+                }
+            </tbody>
+        </table>
+    </div><!-- .card -->
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<!-- .nk-block --
+
+     <!-- Modal - Subscription Cancle -->
+<div class="modal fade" tabindex="-1" id="request-cancel">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
+            <div class="modal-body modal-body-md">
+                <h4 class="nk-modal-title title">Cancel Your Subscription</h4>
+                <p><strong>Are you sure you want to cancel your subscription?</strong></p>
+                <p>If you cancel, you'll lose your all demand. But you can re-subscription your favourite plan any time.</p>
+                <div class="form">
+                    <div class="form-group">
+                        <label class="form-label">Enter your password to confirm cancellation</label>
+                        <div class="form-control-wrap">
+                            <input type="password" class="form-control" placeholder="*********">
+                        </div>
+                        <div class="form-note">
+                            <span>You'll receieve confirmation email once successfully cancel your plan.</span>
+                        </div>
+                    </div>
+                    <ul class="align-center flex-wrap g-3">
+                        <li>
+                            <button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#subscription-cancel-confirmed">Cancel Subscription</button>
+                        </li>
+                        <li>
+                            <a href="#" class="btn btn-light" data-dismiss="modal">Never mind, don't cancel</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
