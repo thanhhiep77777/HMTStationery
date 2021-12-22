@@ -35,7 +35,8 @@ namespace HMTStationery.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = db.Users.FirstOrDefault(x => x.Email == email);
+
+                User user = db.Users.FirstOrDefault(x => x.Email == email && x.Status == (int) UserStatus.ENABLE);
                 if (user == null)
                 {
                     ViewBag.Message = "Email is not exist";

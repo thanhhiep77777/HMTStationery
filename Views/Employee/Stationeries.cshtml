@@ -1,0 +1,71 @@
+﻿@model IEnumerable<HMTStationery.Models.Stationery>
+@{
+    ViewBag.Title = "Stationeries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nk-block-head nk-block-head-sm">
+    <div class="nk-block-between">
+        <div class="nk-block-head-content">
+            <h3 class="nk-block-title page-title">Stationeries</h3>
+
+        </div><!-- .nk-block-head-content -->
+        <br />
+        <div class="nk-block-head-content">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="nk-search-box">
+                    <div class="form-group">
+                        <div class="form-control-wrap">
+                            <input type="text" name="search" class="form-control form-control-lg" placeholder="Search...">
+                            <button class="form-icon form-icon-right" type="submit">
+                                <em class="icon ni ni-search"></em>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div><!-- .nk-block-head-content -->
+    </div><!-- .nk-block-between -->
+</div><!-- .nk-block-head -->
+<div class="nk-block">
+    <div class="row g-gs stationery-list">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-6 col-xl-4">
+                <div class="card card-bordered">
+                    <img src="~/Storage/Images/@item.Image" class="card-img-top" alt="Stationery Image">
+                    <div class="card-inner">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@(item.Description.Length>50?item.Description.Substring(0,50)+"...":item.Description)</p>
+                        <a href="#" class="btn btn-primary add-stationery" data-id="@item.ID">Add to preparing list</a>
+                        
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div><!-- .nk-block -->
+@section scripts
+{
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $(".stationery-list").on("click", ".add-stationery", function (e) {
+                 let txtID = e.target.dataset.id;
+                 $.ajax({
+                     url: '/Employee/_AddStationery',
+                     type: 'GET',
+                     dataType: 'html',
+                     data: {
+                         id: txtID
+                     }, success: function () {
+                         Swal.fire("Success", "Added to preparing list !", "success");
+                     }
+                 });
+             });
+         });
+     </script>   
+}

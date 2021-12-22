@@ -20,13 +20,100 @@
                     <div class="container-lg wide-xl">
                         <div class="nk-header-wrap">
                             <div class="nk-header-brand">
-                                <a href="html/subscription/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
-                                   
+                                <a href="/" class="logo-link">
+                                    <h3>HMTStationery</h3>
                                 </a>
                             </div><!-- .nk-header-brand -->
-                            
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    <li class="dropdown user-dropdown">
+                                        <a href="/Employee/ViewProfile" class="dropdown-toggle" >
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                                <span class="lead-text"> @(HttpContext.Current.User.Identity.Name)</span>
+                                               
+                                            </div>
+                                        </a>
+                                    </li><!-- .dropdown -->
+                                    <li class="dropdown notification-dropdown">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon mr-lg-n1" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right dropdown-menu-s1">
+                                            <div class="dropdown-head">
+                                                <span class="sub-title nk-dropdown-title">Notifications</span>
+
+                                            </div>
+                                            <div class="dropdown-body">
+                                                <div class="nk-notification">
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- .nk-notification -->
+                                            </div><!-- .nk-dropdown-body -->
+                                            <div class="dropdown-foot center">
+                                                <a href="#">View All</a>
+                                            </div>
+                                        </div>
+                                    </li><!-- .dropdown -->
+                                    <li class="d-lg-none">
+                                        <a href="#" class="toggle nk-quick-nav-icon mr-n1" data-target="sideNav"><em class="icon ni ni-menu"></em></a>
+                                    </li>
+                                </ul><!-- .nk-quick-nav -->
+                            </div><!-- .nk-header-tools -->
                         </div><!-- .nk-header-wrap -->
                     </div><!-- .container-fliud -->
                 </div>
@@ -35,17 +122,17 @@
                 <div class="nk-content p-0">
                     <div class="container wide-xl">
                         <div class="nk-content-inner">
+
                             <div class="nk-aside" data-content="sideNav" data-toggle-overlay="true" data-toggle-screen="lg" data-toggle-body="true">
                                 <div class="nk-sidebar-menu" data-simplebar>
-
                                     <ul class="nk-menu">
                                         <li class="nk-menu-heading">
                                             <h6 class="overline-title text-primary-alt">Apply Request</h6>
                                         </li><!-- .nk-menu-heading -->
                                         <li class="nk-menu-item">
                                             <a href="/Employee/ApplyRequest" class="btn btn-primary">
-                                            <em class="icon ni ni-plus"></em> 
-                                            <span class="nk-menu-text">Apply a request now</span>
+                                                <em class="icon ni ni-plus"></em>
+                                                <span class="nk-menu-text">Apply a request now</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
 
@@ -69,7 +156,7 @@
                                             <h6 class="overline-title text-primary-alt">Stationeries</h6>
                                         </li><!-- .nk-menu-heading -->
                                         <li class="nk-menu-item">
-                                            <a href="/Employee/Staioneries" class="nk-menu-link">
+                                            <a href="/Employee/Stationeries" class="nk-menu-link">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
                                                 <span class="nk-menu-text">All Available Stationeries</span>
                                             </a>
@@ -113,6 +200,7 @@
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     </ul><!-- .nk-menu -->
+
                                 </div><!-- .nk-sidebar-menu -->
                                 <div class="nk-aside-close">
                                     <a href="#" class="toggle" data-target="sideNav"><em class="icon ni ni-cross"></em></a>
@@ -120,7 +208,7 @@
                             </div><!-- .nk-aside -->
                             <div class="nk-content-body">
                                 <div class="nk-content-wrap">
-                                @RenderBody()
+                                    @RenderBody()
                                 </div>
                             </div>
                         </div>
@@ -139,5 +227,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
 </body>
 </html>

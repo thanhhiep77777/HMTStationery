@@ -422,7 +422,7 @@ namespace HMTStationery.Controllers
                     request.Status = (int)RequestStatus.CANCELED;
                     foreach (RequestDetail item in request.RequestDetails)
                     {
-                         item.Stationery.Stock += item.Quantity;
+                        item.Stationery.Stock += item.Quantity;
                     }
                     db.SaveChanges();
                     ViewBag.Message = "Request canceled successfully";
@@ -434,6 +434,21 @@ namespace HMTStationery.Controllers
                 }
             }
             return View("ToMeRequestDetail", request);
+        }
+        //View stationeries
+        public ActionResult Stationeries(string search = null)
+        {
+            List<Stationery> list;
+            if (string.IsNullOrEmpty(search))
+            {
+                list = db.Stationeries.OrderByDescending(x => x.ID).ToList();
+            }
+            else
+            {
+                list = db.Stationeries.Where(x => x.Name.ToLower()
+                    .Contains(search.ToLower())).Take(20).ToList();
+            }
+            return View(list);
         }
         //View profile
         public ActionResult ViewProfile()

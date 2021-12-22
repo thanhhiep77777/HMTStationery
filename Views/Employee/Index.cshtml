@@ -5,7 +5,7 @@
     <div class="nk-block-head nk-block-head-lg">
         <div class="nk-block-between-md g-4">
             <div class="nk-block-head-content">
-                <h2 class="nk-block-title fw-normal">Welcome, </h2>
+                <h2 class="nk-block-title fw-normal">Welcome, @(HttpContext.Current.User.Identity.Name)</h2>
                 <div class="nk-block-des">
                     <p>Welcome to HMT stationery management system</p>
                 </div>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="nk-wg1-action">
-                            <a href="/Employee/Stationery" class="link"><span>See Stationery List</span> <em class="icon ni ni-chevron-right"></em></a>
+                            <a href="/Employee/Stationeries" class="link"><span>See Stationery List</span> <em class="icon ni ni-chevron-right"></em></a>
                         </div>
                     </div>
                 </div>
@@ -69,79 +69,17 @@
                                 </svg>
                             </div>
                             <div class="nk-wg1-text">
-                                <h5 class="title">Security Setting</h5>
-                                <p>You have full control to manage your own account and keep account fully secure.</p>
+                                <h5 class="title">My Request</h5>
+                                <p>All request I have applied.</p>
                             </div>
                         </div>
                         <div class="nk-wg1-action">
-                            <a href="html/subscription/profile-setting.html" class="link"><span>Account Setting</span> <em class="icon ni ni-chevron-right"></em></a>
+                            <a href="/Employee/MyRequests" class="link"><span>View My Requests</span> <em class="icon ni ni-chevron-right"></em></a>
                         </div>
                     </div>
                 </div>
             </div><!-- .col -->
-            <div class="col-md-6">
-                <div class="card card-bordered card-full">
-                    <div class="nk-wg1">
-                        <div class="nk-wg1-block">
-                            <div class="nk-wg1-img">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
-                                    <path d="M68.14,80.86,30.21,72.69a5.93,5.93,0,0,1-4.57-7l12.26-56A6,6,0,0,1,45,5.14l28.18,6.07L85.5,29.51,75.24,76.33A6,6,0,0,1,68.14,80.86Z" fill="#eff1ff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <polyline points="73 12.18 69.83 26.66 85.37 30.08" fill="#eff1ff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <path d="M66.26,71.15,29.05,82.46a6,6,0,0,1-7.46-4L4.76,23.15a6,6,0,0,1,4-7.47l27.64-8.4L56.16,17.39,70.24,63.68A6,6,0,0,1,66.26,71.15Z" fill="#e3e7fe" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <polyline points="36.7 8.22 41.05 22.53 56.33 17.96" fill="#e3e7fe" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <path d="M68,85H29a6,6,0,0,1-6-6V21a6,6,0,0,1,6-6H58L74,30.47V79A6,6,0,0,1,68,85Z" fill="#fff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <polyline points="58 16 58 31 74 31.07" fill="#fff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="45" y1="41" x2="61" y2="41" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="35" y1="48" x2="61" y2="48" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="35" y1="55" x2="61" y2="55" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="35" y1="63" x2="61" y2="63" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="35" y1="69" x2="51" y2="69" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <text transform="translate(34.54 43.18) scale(0.99 1)" font-size="9.31" fill="#6576ff" font-family="Nunito-Black, Nunito Black">$</text>
-                                </svg>
-                            </div>
-                            <div class="nk-wg1-text">
-                                <h5 class="title">Billing History</h5>
-                                <p>Check out all your payment history. You can also download or print your invoice.</p>
-                            </div>
-                        </div>
-                        <div class="nk-wg1-action">
-                            <a href="html/subscription/payments.html" class="link"><span>Payment History</span> <em class="icon ni ni-chevron-right"></em></a>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- .col -->
-            <div class="col-md-6">
-                <div class="card card-bordered card-full">
-                    <div class="nk-wg1">
-                        <div class="nk-wg1-block">
-                            <div class="nk-wg1-img">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
-                                    <path d="M40.74,5.16l38.67,9.23a6,6,0,0,1,4.43,7.22L70.08,80a6,6,0,0,1-7.17,4.46L24.23,75.22A6,6,0,0,1,19.81,68L33.56,9.62A6,6,0,0,1,40.74,5.16Z" fill="#eff1ff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <path d="M50.59,6.5,11.18,11.73a6,6,0,0,0-5.13,6.73L13.85,78a6,6,0,0,0,6.69,5.16l39.4-5.23a6,6,0,0,0,5.14-6.73l-7.8-59.49A6,6,0,0,0,50.59,6.5Z" fill="#eff1ff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <rect x="15" y="15" width="54" height="70" rx="6" ry="6" fill="#fff" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <line x1="42" y1="77" x2="58" y2="77" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <circle cx="38" cy="77" r="0.5" fill="#c4cefe" stroke="#c4cefe" stroke-miterlimit="10" />
-                                    <line x1="42" y1="72" x2="58" y2="72" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <circle cx="38" cy="72" r="0.5" fill="#c4cefe" stroke="#c4cefe" stroke-miterlimit="10" />
-                                    <line x1="42" y1="66" x2="58" y2="66" fill="none" stroke="#c4cefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <circle cx="38" cy="66" r="0.5" fill="#c4cefe" stroke="#c4cefe" stroke-miterlimit="10" />
-                                    <path d="M46,40l-15-.3V40A15,15,0,1,0,46,25h-.36Z" fill="#e3e7fe" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <path d="M42,22A14,14,0,0,0,28,36H42V22" fill="#e3e7fe" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <polyline points="33.47 30.07 28.87 23 23 23" fill="none" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                    <polyline points="25 56 35 56 40.14 49" fill="none" stroke="#6576ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                                </svg>
-                            </div>
-                            <div class="nk-wg1-text">
-                                <h5 class="title">Account Reports</h5>
-                                <p>Check your reports of uses and manage your packages or subscriptions that you have.</p>
-                            </div>
-                        </div>
-                        <div class="nk-wg1-action">
-                            <a href="html/subscription/subscriptions.html" class="link"><span>Manage Subscription</span> <em class="icon ni ni-chevron-right"></em></a>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- .col -->
+           
         </div><!-- .row -->
     </div><!-- .nk-block -->
     
