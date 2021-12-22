@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using HMTStationery.Models;
 using System.Security.Claims;
 using System;
+using HMTStationery.General;
 
 namespace HMTStationery.Controllers
 {
@@ -12,6 +13,7 @@ namespace HMTStationery.Controllers
     public class EmployeeController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
+
         public ActionResult Index()
         {
             return View();
@@ -59,7 +61,7 @@ namespace HMTStationery.Controllers
                     request.SenderID = user.ID;
                     request.Date = DateTime.Now;
                     request.Status = (int?)General.RequestStatus.WAITING;
-                    foreach(PreparingStationery item in prepare)
+                    foreach (PreparingStationery item in prepare)
                     {
                         RequestDetail detail = new RequestDetail();
                         detail.Price = item.Item.Price;
@@ -116,9 +118,10 @@ namespace HMTStationery.Controllers
             return PartialView("Partial/ChosenStationeries", list);
         }
         //Add stationery to preparing list
-        [HttpPost]
+
         public JsonResult _AddStationery(int id)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             List<PreparingStationery> prepare = new List<PreparingStationery>();
             if (Session["prepare"] == null)
             {
@@ -187,10 +190,12 @@ namespace HMTStationery.Controllers
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
+            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName)
+                .Select(c => c.Value).SingleOrDefault();
             int ID = int.Parse(givenName);
 
-            List<Request> list = db.Requests.Where(x=>x.SenderID== ID).ToList();
+            List<Request> list = db.Requests.Where(x => x.SenderID == ID)
+                .OrderByDescending(x => x.Date).ToList();
             return View(list);
         }
         //Request appplied to current user
@@ -198,15 +203,23 @@ namespace HMTStationery.Controllers
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
-            string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
 
-            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email).ToList();
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email)
+                .OrderByDescending(x => x.Date).ToList();
             return View(list);
         }
         //My request detail
         public ActionResult RequestDetail(int ID)
         {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName)
+                .Select(c => c.Value).SingleOrDefault();
+            int UserID = int.Parse(givenName);
+
             Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
             return View(request);
         }
@@ -217,12 +230,218 @@ namespace HMTStationery.Controllers
             Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
             return View(request);
         }
+        //Approve request
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApproveRequest(int requestID, string password, string responseMessage)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = AuthController.EncryptPassword(password, email);
+
+            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Password was incorrect, please try again!";
+
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.WAITING)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.APPROVED;
+                    request.ResponseMessage = responseMessage;
+
+                    foreach (RequestDetail item in request.RequestDetails)
+                    {
+                        if (item.Stationery.Stock > item.Quantity)
+                        {
+                            item.Stationery.Stock -= item.Quantity;
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Some of chosen stationeries in request are out of stock";
+                            return View("ToMeRequestDetail", request);
+                        }
+                    }
+                    db.SaveChanges();
+                    ViewBag.Message = "Request approved successfully";
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+
+            }
+            return View("ToMeRequestDetail", request);
+        }
+        //Approve request
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RejectRequest(int requestID, string password, string responseMessage)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = AuthController.EncryptPassword(password, email);
+            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Password was incorrect, please try again!";
+
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.WAITING)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.REJECTED;
+                    request.ResponseMessage = responseMessage;
+                    db.SaveChanges();
+                    ViewBag.Message = "Request rejected successfully";
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+
+            }
+            return View("ToMeRequestDetail", request);
+        }
+        //Withdraw
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult WithdrawRequest(int requestID, string password)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = AuthController.EncryptPassword(password, email);
+            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Password was incorrect, please try again!";
+
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.WAITING)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.WITHDRAWN;
+
+                    db.SaveChanges();
+                    ViewBag.Message = "Request withdrawn successfully";
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+
+            }
+            return View("RequestDetail", request);
+        }
+        //Cancel Request
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CancelRequest(int requestID, string password)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = AuthController.EncryptPassword(password, email);
+            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Password was incorrect, please try again!";
+
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.APPROVED)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.WAITINGCANCEL;
+
+                    db.SaveChanges();
+                    ViewBag.Message = "Successfully, Waiting for approving cancel from superior";
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+
+            }
+            return View("RequestDetail", request);
+        }
+        //Cancel Request
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApproveCancelRequest(int requestID, string password)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+
+            string hashPassword = AuthController.EncryptPassword(password, email);
+            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
+            if (user == null)
+            {
+                ViewBag.Message = "Password was incorrect, please try again!";
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.WAITINGCANCEL)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.CANCELED;
+                    foreach (RequestDetail item in request.RequestDetails)
+                    {
+                         item.Stationery.Stock += item.Quantity;
+                    }
+                    db.SaveChanges();
+                    ViewBag.Message = "Request canceled successfully";
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+            }
+            return View("ToMeRequestDetail", request);
+        }
         //View profile
         public ActionResult ViewProfile()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
 
             User user = db.Users.FirstOrDefault(x => x.Email == email);
 

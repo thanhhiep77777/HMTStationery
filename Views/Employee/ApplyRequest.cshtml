@@ -129,11 +129,11 @@
             });
             //Add Eventlistener for searching staioneries
             $('#livesearch').on('click', '.choose-button', function (e) {
-                e.preventDefault();
+                
                 let txtID = e.target.dataset.id;
                 $.ajax({
                     url: '/Employee/_AddStationery',
-                    type: 'POST',
+                    type: 'GET',
                     dataType: 'html',
                     data: {
                         id: txtID

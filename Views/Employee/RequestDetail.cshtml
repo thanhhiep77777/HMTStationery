@@ -38,6 +38,15 @@
 <div class="nk-block">
     <div class="row">
         <div class="col-xl-12">
+            @if (ViewBag.Message != null)
+            {
+                <div class="example-alert mb-1">
+                    <div class="alert alert-warning alert-icon">
+                        <em class="icon ni ni-alert-circle"></em>
+                        <span>@ViewBag.Message</span>
+                    </div>
+                </div>
+            }
             <div class="card card-bordered">
                 <div class="card-inner-group">
                     <div class="card-inner">
@@ -142,33 +151,75 @@
 </div>
 <!-- .nk-block --
 
-     <!-- Modal - Subscription Cancle -->
+
+<!-- Modal - Withdraw reject -->
+<div class="modal fade" tabindex="-1" id="request-withdraw">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
+            <div class="modal-body modal-body-md">
+                <h4 class="nk-modal-title title">Reject this request</h4>
+                <p><strong>Are you sure you want to reject this request ?</strong></p>
+                <p>Please verify your identity </p>
+                <div class="form">
+                    @using (Html.BeginForm("WithdrawRequest", "Employee", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="requestID" value="@Model.ID" />
+
+                        <div class="form-group">
+                            <label class="form-label">Enter your password to confirm withdrawing</label>
+                            <div class="form-control-wrap">
+                                <input type="password" required name="password" class="form-control" placeholder="*********">
+                            </div>
+                        </div>
+
+                        <ul class="align-center flex-wrap g-3">
+                            <li>
+                                <button class="btn btn-warning" type="submit">Withdraw request</button>
+                            </li>
+                            <li>
+                                <a href="#" class="btn btn-light" data-dismiss="modal">Never mind, don't withdraw</a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+
+<!-- Modal - Cancel reject -->
 <div class="modal fade" tabindex="-1" id="request-cancel">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <a href="#" class="close" data-dismiss="modal" aria-label="Close"><em class="icon ni ni-cross"></em></a>
             <div class="modal-body modal-body-md">
-                <h4 class="nk-modal-title title">Cancel Your Subscription</h4>
-                <p><strong>Are you sure you want to cancel your subscription?</strong></p>
-                <p>If you cancel, you'll lose your all demand. But you can re-subscription your favourite plan any time.</p>
+                <h4 class="nk-modal-title title">Cancel this request</h4>
+                <p><strong>Are you sure you want to cancel this request ?</strong></p>
+                <p>Please verify your identity </p>
                 <div class="form">
-                    <div class="form-group">
-                        <label class="form-label">Enter your password to confirm cancellation</label>
-                        <div class="form-control-wrap">
-                            <input type="password" class="form-control" placeholder="*********">
+                    @using (Html.BeginForm("CancelRequest", "Employee", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="requestID" value="@Model.ID" />
+
+                        <div class="form-group">
+                            <label class="form-label">Enter your password to confirm canceling</label>
+                            <div class="form-control-wrap">
+                                <input type="password" required name="password" class="form-control" placeholder="*********">
+                            </div>
                         </div>
-                        <div class="form-note">
-                            <span>You'll receieve confirmation email once successfully cancel your plan.</span>
-                        </div>
-                    </div>
-                    <ul class="align-center flex-wrap g-3">
-                        <li>
-                            <button class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#subscription-cancel-confirmed">Cancel Subscription</button>
-                        </li>
-                        <li>
-                            <a href="#" class="btn btn-light" data-dismiss="modal">Never mind, don't cancel</a>
-                        </li>
-                    </ul>
+
+                        <ul class="align-center flex-wrap g-3">
+                            <li>
+                                <button class="btn btn-warning" type="submit">Cancel request</button>
+                            </li>
+                            <li>
+                                <a href="#" class="btn btn-light" data-dismiss="modal">Never mind, don't cancel</a>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </div><!-- .modal-content -->
