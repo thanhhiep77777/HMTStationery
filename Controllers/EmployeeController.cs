@@ -6,6 +6,10 @@ using HMTStationery.Models;
 using System.Security.Claims;
 using System;
 using HMTStationery.General;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+using System.Runtime.Remoting.Contexts;
+using HMTStationery.Hubs;
 
 namespace HMTStationery.Controllers
 {
@@ -13,7 +17,22 @@ namespace HMTStationery.Controllers
     public class EmployeeController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
-
+        private int GetUserID()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName)
+                .Select(c => c.Value).SingleOrDefault();
+            return int.Parse(givenName);
+        }
+        private string GetUserEmail()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string email = claims.Where(c => c.Type == ClaimTypes.Email)
+                .Select(c => c.Value).SingleOrDefault();
+            return email;
+        }
         public ActionResult Index()
         {
             return View();
@@ -37,9 +56,8 @@ namespace HMTStationery.Controllers
                 //get preparing stationeries
                 List<PreparingStationery> prepare = (List<PreparingStationery>)Session["prepare"] ?? new List<PreparingStationery>();
                 //get user email
-                var claimsIdentity = User.Identity as ClaimsIdentity;
-                IEnumerable<Claim> claims = claimsIdentity.Claims;
-                string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+
+                string email = GetUserEmail();
                 //Check empty preparing stationeries
                 if (prepare.Count == 0)
                 {
@@ -72,6 +90,7 @@ namespace HMTStationery.Controllers
 
                     db.Requests.Add(request);
                     db.SaveChanges();
+
                 }
                 catch (Exception)
                 {
@@ -81,6 +100,9 @@ namespace HMTStationery.Controllers
                     return View();
                 }
             }
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            context.Clients.User(request.User.Email).addNotification("You have applied a request success");
+            context.Clients.User(request.ReceiverEmail).addNotification("You have a new request applied by " + request.User.Name);
 
             return Redirect("/Employee/MyRequests");
         }
@@ -88,9 +110,9 @@ namespace HMTStationery.Controllers
         [HttpPost]
         public JsonResult IsReciverExist(string ReceiverEmail)
         {
+            string email = GetUserEmail();
 
-            return Json(db.Users.FirstOrDefault(x => x.Email == ReceiverEmail && x.Role1.Name != "Admin") != null);
-
+            return Json(db.Users.FirstOrDefault(x => x.Email == ReceiverEmail && x.Role1.Name != "Admin" && x.Email != email) != null);
         }
         //Search stationeries to suggest
         [HttpPost]
@@ -188,12 +210,7 @@ namespace HMTStationery.Controllers
         //Request applied by current user
         public ActionResult MyRequests()
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName)
-                .Select(c => c.Value).SingleOrDefault();
-            int ID = int.Parse(givenName);
-
+            int ID = GetUserID();
             List<Request> list = db.Requests.Where(x => x.SenderID == ID)
                 .OrderByDescending(x => x.Date).ToList();
             return View(list);
@@ -201,25 +218,15 @@ namespace HMTStationery.Controllers
         //Request appplied to current user
         public ActionResult ToMeRequests()
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
-
-            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email)
+            string email = GetUserEmail();
+            int withdrawnStatus = (int)RequestStatus.WITHDRAWN;
+            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email&&x.Status!= withdrawnStatus)
                 .OrderByDescending(x => x.Date).ToList();
             return View(list);
         }
         //My request detail
         public ActionResult RequestDetail(int ID)
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string givenName = claims.Where(c => c.Type == ClaimTypes.GivenName)
-                .Select(c => c.Value).SingleOrDefault();
-            int UserID = int.Parse(givenName);
-
             Request request = db.Requests.FirstOrDefault(x => x.ID == ID);
             return View(request);
         }
@@ -233,21 +240,15 @@ namespace HMTStationery.Controllers
         //Approve request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApproveRequest(int requestID, string password, string responseMessage)
+        public ActionResult ApproveRequest(int requestID, string responseMessage)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
-            string hashPassword = AuthController.EncryptPassword(password, email);
-
-            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
-            if (user == null)
+            if (request.ReceiverEmail == email)
             {
-                ViewBag.Message = "Password was incorrect, please try again!";
+                ViewBag.Message = "You don't have permission to access another's request";
 
             }
             //Handle request
@@ -285,20 +286,15 @@ namespace HMTStationery.Controllers
         //Approve request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RejectRequest(int requestID, string password, string responseMessage)
+        public ActionResult RejectRequest(int requestID, string responseMessage)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
-            string hashPassword = AuthController.EncryptPassword(password, email);
-            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
-            if (user == null)
+            if (request.ReceiverEmail == email)
             {
-                ViewBag.Message = "Password was incorrect, please try again!";
+                ViewBag.Message = "You don't have permission to access another's request";
 
             }
             //Handle request
@@ -323,20 +319,15 @@ namespace HMTStationery.Controllers
         //Withdraw
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult WithdrawRequest(int requestID, string password)
+        public ActionResult WithdrawRequest(int requestID)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
-            string hashPassword = AuthController.EncryptPassword(password, email);
-            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
-            if (user == null)
+            if (request.User.Email == email)
             {
-                ViewBag.Message = "Password was incorrect, please try again!";
+                ViewBag.Message = "You don't have permission to access another's request";
 
             }
             //Handle request
@@ -361,20 +352,15 @@ namespace HMTStationery.Controllers
         //Cancel Request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CancelRequest(int requestID, string password)
+        public ActionResult CancelRequest(int requestID)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
-            string hashPassword = AuthController.EncryptPassword(password, email);
-            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
-            if (user == null)
+            if (request.User.Email == email)
             {
-                ViewBag.Message = "Password was incorrect, please try again!";
+                ViewBag.Message = "You don't have permission to access another's request";
 
             }
             //Handle request
@@ -399,20 +385,17 @@ namespace HMTStationery.Controllers
         //Cancel Request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApproveCancelRequest(int requestID, string password)
+        public ActionResult ApproveCancelRequest(int requestID)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
-            string hashPassword = AuthController.EncryptPassword(password, email);
-            User user = db.Users.FirstOrDefault(x => x.Email == email && x.Password == hashPassword);
-            if (user == null)
+
+            if (request.ReceiverEmail == email)
             {
-                ViewBag.Message = "Password was incorrect, please try again!";
+                ViewBag.Message = "You don't have permission to access another's request";
+
             }
             //Handle request
             else if (request.Status == (int)RequestStatus.WAITINGCANCEL)
@@ -453,10 +436,7 @@ namespace HMTStationery.Controllers
         //View profile
         public ActionResult ViewProfile()
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = claimsIdentity.Claims;
-            string email = claims.Where(c => c.Type == ClaimTypes.Email)
-                .Select(c => c.Value).SingleOrDefault();
+            string email = GetUserEmail();
 
             User user = db.Users.FirstOrDefault(x => x.Email == email);
 

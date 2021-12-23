@@ -15,12 +15,17 @@ using Microsoft.Owin.Security;
 using HMTStationery.General;
 using HMTStationery.App_Start;
 using System.Collections.Generic;
+using HMTStationery.Hubs;
+using System.Collections.Concurrent;
+using System.Runtime.Remoting.Contexts;
+using Microsoft.AspNet.SignalR;
 
 namespace HMTStationery.Controllers
 {
     public class AuthController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
+        private static ConcurrentDictionary<string, string> clients = new ConcurrentDictionary<string, string>();
         // GET: Auth
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -36,7 +41,7 @@ namespace HMTStationery.Controllers
             if (ModelState.IsValid)
             {
 
-                User user = db.Users.FirstOrDefault(x => x.Email == email && x.Status == (int) UserStatus.ENABLE);
+                User user = db.Users.FirstOrDefault(x => x.Email == email && x.Status == (int)UserStatus.ENABLE);
                 if (user == null)
                 {
                     ViewBag.Message = "Email is not exist";
@@ -49,9 +54,7 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-                    Session["ID"]= user.ID;
-                    Session["Name"]= user.Name;
-                    Session["Email"]= user.Email;                    
+                    
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
@@ -66,10 +69,13 @@ namespace HMTStationery.Controllers
                           new Claim(ClaimTypes.Role, role),
                       },
                       DefaultAuthenticationTypes.ApplicationCookie);
-
+                    //Login
                     HttpContext.GetOwinContext().Authentication.SignIn(
                       new AuthenticationProperties { IsPersistent = false }, ident);
-                    return Redirect($"~/{returnUrl ?? role}"); // auth succeed 
+                    //Connect to signalr
+                   
+                   
+                    return Redirect($"~/{(returnUrl!="" ?returnUrl:role)}"); // auth succeed 
                 }
             }
             return View();
@@ -83,7 +89,7 @@ namespace HMTStationery.Controllers
         [CustomAuthorize(Roles = "Admin,Employee")]
         public ActionResult ChangePassword(string Password, string NewPassword)
         {
-            
+
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
             string email = claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
@@ -102,7 +108,7 @@ namespace HMTStationery.Controllers
                     user.Password = EncryptPassword(NewPassword, email);
                     db.SaveChanges();
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     ViewBag.Message = "Unknown error";
                     return View();
@@ -119,12 +125,13 @@ namespace HMTStationery.Controllers
         public ActionResult Logout()
         {
             HttpContext.GetOwinContext().Authentication.SignOut();
+            Session.Abandon();
             return RedirectToAction("Index", "Employee");
         }
-        public ActionResult TestPassword(string email, string pass)
-        {
-            return Content(EncryptPassword(pass, email));
-        }
+        //public ActionResult TestPassword(string email, string pass)
+        //{
+        //    return Content(EncryptPassword(pass, email));
+        //}
         public static string EncryptPassword(string password, string saltorusername)
         {
             using (var sha256 = SHA256.Create())

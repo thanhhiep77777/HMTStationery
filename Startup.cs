@@ -1,6 +1,8 @@
-﻿using HMTStationery.Models;
+﻿using HMTStationery.Hubs;
+using HMTStationery.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 
@@ -12,7 +14,11 @@ namespace HMTStationery
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            
+
+            var idProvider = new CustomUserIdProvider();
+            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => idProvider);
+            app.MapSignalR();
+
         }
        
     }

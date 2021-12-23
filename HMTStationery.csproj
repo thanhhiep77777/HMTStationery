@@ -190,6 +190,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\ConnectionMapping.cs" />
+    <Compile Include="Hubs\CustomUserIdProvider.cs" />
+    <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Models\HMTStationeryEntites.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -394,6 +397,7 @@
     <Content Include="Views\Employee\ToMeRequests.cshtml" />
     <Content Include="Views\Employee\ToMeRequestDetail.cshtml" />
     <Content Include="Views\Employee\Stationeries.cshtml" />
+    <Content Include="Views\Employee\TestSignalR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />

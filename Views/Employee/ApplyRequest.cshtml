@@ -7,77 +7,75 @@
 
 <h2>Apply Request</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<form action="#" class="form-contact">
     <div class="card card-bordered">
+        <div class="card-header text-center">
+            <span>Enter request infomation</span>
+        </div>
         <div class="card-inner">
-            <div class="card-head">
-                <h5 class="card-title">Request information</h5>
-            </div>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="row g-4">
-                <div class="col-lg-6">
+                <div class="col-12">
                     <div class="form-group">
                         @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
                         <div class="form-control-wrap">
-                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "Title" } })
                             @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
+                </div><!-- .col -->
+                <div class="col-12">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.ReceiverEmail, htmlAttributes: new { @class = "control-label " })
+                        @Html.LabelFor(model => model.ReceiverEmail, htmlAttributes: new { @class = "control-label" })
                         <div class="form-control-wrap">
-                            @Html.EditorFor(model => model.ReceiverEmail, new { htmlAttributes = new { @class = "form-control" } })
-                            <div id="suggesstion-box"></div>
+                            @Html.EditorFor(model => model.ReceiverEmail, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "Receiver Email" } })
                             @Html.ValidationMessageFor(model => model.ReceiverEmail, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
+                </div><!-- .col -->
+                <div class="col-12">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.RequestMessage, htmlAttributes: new { @class = "control-label " })
+                        @Html.LabelFor(model => model.RequestMessage, htmlAttributes: new { @class = "control-label" })
                         <div class="form-control-wrap">
-                            @Html.EditorFor(model => model.RequestMessage, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.RequestMessage, "", new { @class = "text-danger" })
+                            <div class="form-editor-custom">
+                                @Html.TextAreaFor(model => model.RequestMessage,
+                                    htmlAttributes: new { @class = "form-control form-control-lg no-resize", @placeholder = "Write your message" })
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- .col -->
+
+
+            </div><!-- .row -->
+            @* Search box *@
+            <div class="nk-block-head wide-md nk-block-head-lg mt-2">
+                <div class="nk-block-head-content">
+                    <p>Find some stationeries to add to this request</p>
+                    <div class="nk-search-box">
+                        <div class="form-group">
+                            <div class="form-control-wrap d-flex">
+                                <input type="text" class="form-control form-control-lg col-md-10 col-sm-10 col-xs-10" id="searchBox" placeholder="Search...">
+                                <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
+                            </div>
+                            <div class="form-group" id="livesearch">
+
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div><!-- .nk-block-head -->
+            @* Preparing table *@
+            <h3>Chosen stationeries</h3>
+            <div id="chosen-stationeries"></div>
 
-                <div class="col-12">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-lg btn-primary">Apply Request</button>
-                    </div>
-                </div>
-            </div>
+            <div class="col-12 mt-3">
+                <a href="#" class="btn btn-primary btn-block">Apply Request</a>
+            </div><!-- .col -->
 
-        </div>
-    </div>
-}
-@* Search box *@
-<div class="nk-block-head wide-md nk-block-head-lg">
-    <div class="nk-block-head-content">
-        <p>Find some stationeries to add to this request</p>
-        <div class="nk-search-box">
-            <div class="form-group">
-                <div class="form-control-wrap d-flex">
-                    <input type="text" class="form-control form-control-lg col-md-10 col-sm-10 col-xs-10" id="searchBox" placeholder="Search...">
-                    <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
-                </div>
-                <div class="form-group" id="livesearch">
+        </div><!-- .card-inner -->
+    </div><!-- .card -->
+</form><!-- .form- -->
 
-                </div>
-            </div>
-        </div>
-    </div>
-</div><!-- .nk-block-head -->
-@* Preparing table *@
-<h3>Chosen stationeries</h3>
-<div id="chosen-stationeries"></div>
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -129,7 +127,7 @@
             });
             //Add Eventlistener for searching staioneries
             $('#livesearch').on('click', '.choose-button', function (e) {
-                
+
                 let txtID = e.target.dataset.id;
                 $.ajax({
                     url: '/Employee/_AddStationery',
@@ -170,10 +168,10 @@
                         },
                         beforeSend: function () {
                             $('#livesearch').html(`<div class="d-flex justify-content-center">
-                                                      <div class="spinner-border" role="status">
-                                                        <span class="sr-only">Loading...</span>
-                                                      </div>
-                                                    </div>`);
+                                                                                              <div class="spinner-border" role="status">
+                                                                                                <span class="sr-only">Loading...</span>
+                                                                                              </div>
+                                                                                            </div>`);
                         },
                     }).done(function (data) {
                         $('#livesearch').html(data);

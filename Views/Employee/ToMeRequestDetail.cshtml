@@ -110,9 +110,7 @@
                     <th class="tb-tnx-info">
                         Name
                     </th>
-                    <th class="tb-tnx-info">
-                        Description
-                    </th>
+                    
                     <th class="tb-tnx-info">
                         Image
                     </th>
@@ -134,12 +132,7 @@
                         <td class="tb-tnx-info">
                             @item.Stationery.Name
                         </td>
-                        <td class="tb-tnx-info">
-                            @(item.Stationery.Description.Length>30?
-                                item.Stationery.Description.Substring(0,30)+"...":
-                                item.Stationery.Description
-                            )
-                        </td>
+                       
                         <td class="tb-tnx-info">
                             <img src="~/Storage/Images/@item.Stationery.Image" alt="Stationery Image" height="150" />
                         </td>
@@ -177,12 +170,6 @@
                         <input type="hidden" name="requestID" value="@Model.ID" />
 
                         <div class="form-group">
-                            <label class="form-label">Enter your password to confirm approving</label>
-                            <div class="form-control-wrap">
-                                <input type="password" required name="password" class="form-control" placeholder="*********">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="form-label">Response a message to @Model.User.Name</label>
                             <div class="form-control-wrap">
                                 <input type="text" required name="responseMessage" class="form-control">
@@ -218,12 +205,6 @@
                         <input type="hidden" name="requestID" value="@Model.ID" />
 
                         <div class="form-group">
-                            <label class="form-label">Enter your password to confirm rejecting</label>
-                            <div class="form-control-wrap">
-                                <input type="password" required name="password" class="form-control" placeholder="*********">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="form-label">Response a message to @Model.User.Name</label>
                             <div class="form-control-wrap">
                                 <input type="text" required name="responseMessage" class="form-control">
@@ -258,12 +239,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="requestID" value="@Model.ID" />
 
-                        <div class="form-group">
-                            <label class="form-label">Enter your password to confirm canceling</label>
-                            <div class="form-control-wrap">
-                                <input type="password" required name="password" class="form-control" placeholder="*********">
-                            </div>
-                        </div>
+                        
                         
                         <ul class="align-center flex-wrap g-3">
                             <li>

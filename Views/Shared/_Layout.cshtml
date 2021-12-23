@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
     <link rel="stylesheet" href="~/Content/assets/css/dashlite.css?ver=2.2.0">
     <link id="skin-default" rel="stylesheet" href="~/Content/assets/css/theme.css?ver=2.2.0">
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
 </head>
 
 <body class="nk-body bg-white npc-subscription has-aside ">
@@ -27,13 +28,14 @@
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
                                     <li class="dropdown user-dropdown">
-                                        <a href="/Employee/ViewProfile" class="dropdown-toggle" >
+                                        <a href="/Employee/ViewProfile" class="dropdown-toggle">
                                             <div class="user-toggle">
                                                 <div class="user-avatar sm">
                                                     <em class="icon ni ni-user-alt"></em>
                                                 </div>
                                                 <span class="lead-text"> @(HttpContext.Current.User.Identity.Name)</span>
-                                               
+                                                
+
                                             </div>
                                         </a>
                                     </li><!-- .dropdown -->
@@ -224,8 +226,26 @@
     <!-- JavaScript -->
     <script src="~/Content/assets/js/bundle.js?ver=2.2.0"></script>
     <script src="~/Content/assets/js/scripts.js?ver=2.2.0"></script>
+
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+   
+
+    <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        //Connect to hub 
+        var hub = $.connection.NotificationHub;  //here
+
+        //Fire a notification
+        hub.client.addNotification = function (message) {
+            Swal.fire("Notification", message, "");
+        }
+
+        //Start hub conection
+        $.connection.hub.start().done(function () {    //here
+            console.log("connected to hub");
+        });
+    </script>
     @RenderSection("scripts", required: false)
 
 </body>
