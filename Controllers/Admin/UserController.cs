@@ -6,13 +6,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
+using HMTStationery.General;
 using HMTStationery.Models;
 using PagedList;
 
 
 namespace HMTStationery.Controllers.Admin
 {
-    //[Authorize(Roles ="Admin")]
+    [Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
@@ -60,7 +62,7 @@ namespace HMTStationery.Controllers.Admin
         public ActionResult Create()
         {
             ViewBag.Role = new SelectList(db.Roles, "ID", "Name");
-            ViewBag.SuperiorID = new SelectList(db.Users, "ID", "Name");
+            ViewBag.SuperiorID = new SelectList(db.Users.Where(x=>x.Role1.Name!="Admin"), "ID", "Name");
             return View();
         }
 
@@ -96,6 +98,12 @@ namespace HMTStationery.Controllers.Admin
                 return HttpNotFound();
             }
             ViewBag.Role = new SelectList(db.Roles, "ID", "Name", user.Role);
+            ViewBag.SuperiorID = new SelectList(db.Users.Where(x => x.ID != id), "ID", "Name", user.SuperiorID);
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(UserStatus)).Cast<UserStatus>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text",user.Status);
             return View(user);
         }
 
@@ -104,7 +112,7 @@ namespace HMTStationery.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,SuperiorID,Role,Email,Password,Status")] User user)
+        public ActionResult Edit([Bind(Include = "ID,Name,SuperiorID,Role,Email,Status")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -113,6 +121,12 @@ namespace HMTStationery.Controllers.Admin
                 return RedirectToAction("Index");
             }
             ViewBag.Role = new SelectList(db.Roles, "ID", "Name", user.Role);
+            ViewBag.SuperiorID = new SelectList(db.Users.Where(x => x.ID != user.ID), "ID", "Name", user.SuperiorID);
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(UserStatus)).Cast<UserStatus>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text", user.Status);
             return View(user);
         }
 

@@ -35,7 +35,7 @@ namespace HMTStationery.Models
         [Required(ErrorMessage = "Please enter Email")]
         [Remote("IsAlreadySigned", "User", HttpMethod = "POST", ErrorMessage = "Email already exists.")]
         public string Email { get; set; }
-        [Required(ErrorMessage ="PLease enter password")]
+        
         public string Password { get; set; }
         public Nullable<int> Status { get; set; }
 

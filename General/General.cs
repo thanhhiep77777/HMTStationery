@@ -28,9 +28,16 @@ namespace HMTStationery.General
     }
     public enum UserStatus 
     {
-        [Display(Name = "ANABLE")]
+        [Display(Name = "ENABLE")]
         ENABLE = 1,
         [Display(Name = "DISABLE")]
         DISABLE =2,
+    }
+    public enum StationeryStatus
+    {
+        [Display(Name = "ENABLE")]
+        ENABLE = 1,
+        [Display(Name = "DISABLE")]
+        DISABLE = 2,
     }
 }

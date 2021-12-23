@@ -1,5 +1,5 @@
 ﻿@model HMTStationery.Models.User
-
+@using HMTStationery.General;
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SuperiorID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SuperiorID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("SuperiorID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SuperiorID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -49,18 +49,12 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
         <div class="form-group">
             @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
             </div>
         </div>

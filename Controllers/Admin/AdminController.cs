@@ -6,11 +6,13 @@ using System.Web.Mvc;
 
 namespace HMTStationery.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         // GET: Admin
         public ActionResult Index()
         {
+            
             return View();
         }
     }

@@ -6,11 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HMTStationery.General;
 using HMTStationery.Models;
 using PagedList;
 
 namespace HMTStationery.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class StationeryController : Controller
     {
         HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
@@ -32,6 +34,11 @@ namespace HMTStationery.Controllers.Admin
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(StationeryStatus)).Cast<StationeryStatus>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text");
             return View();
         }
 
@@ -39,6 +46,11 @@ namespace HMTStationery.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Create(Stationery objStat)
         {
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(StationeryStatus)).Cast<StationeryStatus>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text",objStat.Status);
             if (ModelState.IsValid)
             {
                 HttpPostedFileBase postedfile = objStat.ImageUpload;
@@ -57,6 +69,7 @@ namespace HMTStationery.Controllers.Admin
                     ModelState.AddModelError("", "File type not allowed (Must be jpg,jpeg,png,gif.)");
                     return View();
                 }
+
                 try
                 {
                     db.Stationeries.Add(objStat);

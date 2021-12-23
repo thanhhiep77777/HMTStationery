@@ -1,5 +1,5 @@
 ﻿@model HMTStationery.Models.User
-
+@using HMTStationery.General
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -35,24 +35,18 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
+        
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            
+            @((UserStatus)Model.Status)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Role1.Name)
+           Role
         </dt>
 
         <dd>

@@ -54,7 +54,7 @@ namespace HMTStationery.Controllers
                 }
                 else
                 {
-                    
+
                     string role = user.Role1.Name == "Admin" ? "Admin" : "Employee";
                     var ident = new ClaimsIdentity(
                       new[] { 
@@ -73,9 +73,7 @@ namespace HMTStationery.Controllers
                     HttpContext.GetOwinContext().Authentication.SignIn(
                       new AuthenticationProperties { IsPersistent = false }, ident);
                     //Connect to signalr
-                   
-                   
-                    return Redirect($"~/{(returnUrl!="" ?returnUrl:role)}"); // auth succeed 
+                    return Redirect($"~/{(returnUrl=="/"?role:returnUrl)}"); // auth succeed
                 }
             }
             return View();

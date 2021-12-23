@@ -10,6 +10,7 @@ using HMTStationery.Models;
 
 namespace HMTStationery.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
