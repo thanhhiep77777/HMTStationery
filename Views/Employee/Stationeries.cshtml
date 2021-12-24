@@ -56,7 +56,8 @@
                                 <li><span>Status</span><span>@((StationeryStatus)item.Status)</span></li>
                             </ul>
                             <div class="team-view">
-                                <button  class="btn btn-block btn-dim btn-primary add-stationery"><span>Add to preparing list</span></button>
+                                <a  class="btn  btn-primary add-stationery text-white mr-1" data-id="@item.ID"><span>Add to preparing list</span></a>
+                                <a  class="btn  btn-primary text-white ml-1" href="/Employee/StationeryDetail/@item.ID"><span>View detail</span></a>
                             </div>
                         </div><!-- .team -->
                     </div><!-- .card-inner -->
@@ -74,7 +75,7 @@
              $(".stationery-list").on("click", ".add-stationery", function (e) {
                  let txtID = e.target.dataset.id;
                  $.ajax({
-                     url: '/Employee/_AddStationery',
+                     url: '/Employee/_AddStationery?id=' + txtID,
                      type: 'GET',
                      dataType: 'html',
                      data: {

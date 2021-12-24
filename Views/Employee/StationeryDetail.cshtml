@@ -1,11 +1,11 @@
 ﻿@model HMTStationery.Models.Stationery
-@using HMTStationery.General
+@using HMTStationery.General;
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "StationeryDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>StationeryDetail</h2>
 
 <div>
     <h4>Stationery</h4>
@@ -24,16 +24,15 @@
         </dt>
 
         <dd>
-            $ @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Price)
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Image)
-
         </dt>
 
         <dd>
-            <img src="~/Storage/Images/@Model.Image" width="200" />
+            <img src="~/Storage/Images/@Model.Image" width="500"/>
         </dd>
 
         <dt>
@@ -49,7 +48,8 @@
         </dt>
 
         <dd>
-            @Html.TextAreaFor(model => model.Description)
+            <div data-html="true">@Model.Description</div>
+           
         </dd>
 
         <dt>
@@ -60,15 +60,17 @@
             @((StationeryStatus)Model.Status)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-@section scripts{
-    <script type="text/javascript">
-        CKEDITOR.replace('Description');
-    </script>
-
-}

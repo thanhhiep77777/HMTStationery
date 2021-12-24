@@ -34,7 +34,7 @@
                         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Image</span></div>
                         <div class="nk-tb-col tb-col-xl"><span class="sub-text">Price</span></div>
                         <div class="nk-tb-col tb-col-xl"><span class="sub-text">Stock</span></div>
-                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Description</span></div>
+                
                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
                     </div>
                     <!-- .nk-tb-item -->
@@ -57,7 +57,7 @@
                                 <span>@(item.Description.Length>20?item.Description.Substring(0,20)+"...":item.Description)</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span class="tb-status text-success">@((StationeryStatus)item.Status)</span>
+                                <span class="tb-status ">@((StationeryStatus)item.Status)</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-1">

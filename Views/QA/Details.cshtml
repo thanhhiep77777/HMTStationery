@@ -32,24 +32,10 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Answer)
+            <textarea class="form-group" name="Answer">@Model.Answer</textarea>
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
+       
 
     </dl>
 </div>
@@ -57,3 +43,9 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+@section scripts{
+    <script type="text/javascript">
+        CKEDITOR.replace('Answer');
+    </script>
+
+}

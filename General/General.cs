@@ -40,6 +40,13 @@ namespace HMTStationery.General
         ENABLE = 1,
         [Display(Name = "DISABLE")]
         DISABLE =2,
+    } 
+    public enum QAStatus 
+    {
+        [Display(Name = "ENABLE")]
+        ENABLE = 1,
+        [Display(Name = "DISABLE")]
+        DISABLE =2,
     }
     public enum StationeryStatus
     {

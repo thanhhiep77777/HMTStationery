@@ -350,7 +350,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Storage\Logo\logo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -398,6 +397,7 @@
     <Content Include="Views\Employee\ToMeRequestDetail.cshtml" />
     <Content Include="Views\Employee\Stationeries.cshtml" />
     <Content Include="Views\Employee\TestSignalR.cshtml" />
+    <Content Include="Views\Employee\StationeryDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />

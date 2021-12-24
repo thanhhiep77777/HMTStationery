@@ -1,15 +1,13 @@
 ﻿using HMTStationery.App_Start;
+using HMTStationery.General;
+using HMTStationery.Hubs;
+using HMTStationery.Models;
+using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-using HMTStationery.Models;
 using System.Security.Claims;
-using System;
-using HMTStationery.General;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using System.Runtime.Remoting.Contexts;
-using HMTStationery.Hubs;
+using System.Web.Mvc;
 
 namespace HMTStationery.Controllers
 {
@@ -17,7 +15,7 @@ namespace HMTStationery.Controllers
     public class EmployeeController : Controller
     {
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
-        private int GetUserID()
+        public  int GetUserID()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
@@ -25,7 +23,7 @@ namespace HMTStationery.Controllers
                 .Select(c => c.Value).SingleOrDefault();
             return int.Parse(givenName);
         }
-        private string GetUserEmail()
+        public  string GetUserEmail()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = claimsIdentity.Claims;
@@ -528,6 +526,11 @@ namespace HMTStationery.Controllers
                     .Contains(search.ToLower())).Take(20).ToList();
             }
             return View(list);
+        }
+        public ActionResult StationeryDetail(int ID)
+        {
+            Stationery stationery = db.Stationeries.FirstOrDefault(x => x.ID == ID);
+            return View(stationery);
         }
         public ActionResult Report()
         {

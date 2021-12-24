@@ -5,20 +5,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
-
-using System.Web.Security;
 using System.Text;
 using Microsoft.AspNet.Identity;
-using System.Net;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
 using HMTStationery.General;
 using HMTStationery.App_Start;
 using System.Collections.Generic;
-using HMTStationery.Hubs;
 using System.Collections.Concurrent;
-using System.Runtime.Remoting.Contexts;
-using Microsoft.AspNet.SignalR;
 
 namespace HMTStationery.Controllers
 {
@@ -126,10 +120,10 @@ namespace HMTStationery.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Employee");
         }
-        public ActionResult TestPassword(string email, string pass)
-        {
-            return Content(EncryptPassword(pass, email));
-        }
+        //public ActionResult TestPassword(string email, string pass)
+        //{
+        //    return Content(EncryptPassword(pass, email));
+        //}
         public static string EncryptPassword(string password, string saltorusername)
         {
             using (var sha256 = SHA256.Create())

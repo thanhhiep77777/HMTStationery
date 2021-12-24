@@ -42,7 +42,7 @@ namespace HMTStationery.Controllers.Admin
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Stationery objStat)
         {
@@ -122,7 +122,7 @@ namespace HMTStationery.Controllers.Admin
             return View(objStat);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         public ActionResult Edit(int id,Stationery objsta)
         {
             string currentImagePath = objsta.Image;
