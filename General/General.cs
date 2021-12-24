@@ -15,16 +15,24 @@ namespace HMTStationery.General
     {
         [Display(Name = "WAITING")]
         WAITING =1,
+
         [Display(Name = "APPROVED")]
         APPROVED = 2,
-        [Display(Name = "REJECT")]
+
+        [Display(Name = "REJECTED")]
         REJECTED = 3,
+
         [Display(Name = "CANCELED")]
         CANCELED = 4,
+
         [Display(Name = "WITHDRAWED")]
         WITHDRAWN = 5,
+
         [Display(Name = "WAITING FOR CANCELING")]
-        WAITINGCANCEL = 6
+        WAITINGCANCEL = 6,
+
+        [Display(Name = "REJECTED FOR CACELING")]
+        REJECTEDFORCANCEL = 7,
     }
     public enum UserStatus 
     {

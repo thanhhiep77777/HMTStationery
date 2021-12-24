@@ -20,14 +20,14 @@ namespace HMTStationery.Controllers.Admin
         private HMT_StationeryMntEntities db = new HMT_StationeryMntEntities();
 
         // GET: User
-        public ActionResult Index(string SearchString)
+        public ActionResult Index(string User)
         {
             /* var users = db.Users.Include(u => u.Role1);
              return View(users.ToList());*/
             var users = new List<User>();
-            if (!string.IsNullOrEmpty(SearchString))
+            if (!string.IsNullOrEmpty(User))
             {
-                users = db.Users.Where(n => n.Name.Contains(SearchString)).ToList();
+                users = db.Users.Where(n => n.Name.Contains(User)).ToList();
             }
             else
             {

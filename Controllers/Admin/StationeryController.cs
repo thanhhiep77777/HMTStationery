@@ -113,6 +113,12 @@ namespace HMTStationery.Controllers.Admin
         public ActionResult Edit(int id)
         {
             var objStat = db.Stationeries.Where(n => n.ID == id).FirstOrDefault();
+
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(StationeryStatus)).Cast<StationeryStatus>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList(), "Value", "Text", objStat.Status);
             return View(objStat);
         }
 

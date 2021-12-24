@@ -34,7 +34,7 @@
                                                     <em class="icon ni ni-user-alt"></em>
                                                 </div>
                                                 <span class="lead-text"> @(HttpContext.Current.User.Identity.Name)</span>
-                                                
+
 
                                             </div>
                                         </a>
@@ -228,12 +228,12 @@
     <script src="~/Content/assets/js/scripts.js?ver=2.2.0"></script>
 
     @Scripts.Render("~/bundles/jquery")
-   
+
 
     <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
-        //Connect to hub 
+        //Connect to hub
         var hub = $.connection.NotificationHub;  //here
 
         //Fire a notification
@@ -246,6 +246,7 @@
             console.log("connected to hub");
         });
     </script>
+    
     @RenderSection("scripts", required: false)
 
 </body>

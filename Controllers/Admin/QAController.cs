@@ -14,8 +14,8 @@ namespace HMTStationery.Controllers.Admin
         // GET: QA
         public ActionResult Index()
         {
-            var qAs = db.QAs.Include(q => q.User);
-            return View(qAs.ToList());
+            var QAs = db.QAs;
+            return View(QAs.ToList());
         }
 
         // GET: QA/Details/5
@@ -36,7 +36,7 @@ namespace HMTStationery.Controllers.Admin
         // GET: QA/Create
         public ActionResult Create()
         {
-            ViewBag.UserID = new SelectList(db.Users, "ID", "Name");
+            
             return View();
         }
 
@@ -49,6 +49,7 @@ namespace HMTStationery.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
+                qA.Date = System.DateTime.Now;
                 db.QAs.Add(qA);
                 db.SaveChanges();
                 return RedirectToAction("Index");

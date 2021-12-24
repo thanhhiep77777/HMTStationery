@@ -81,6 +81,12 @@ namespace HMTStationery.Controllers
                     request.Status = (int?)General.RequestStatus.WAITING;
                     foreach (PreparingStationery item in prepare)
                     {
+                        if (item.Quantity > db.Stationeries.First(x => x.ID == item.Item.ID).Stock)
+                        {
+                            ModelState.AddModelError(string.Empty,
+                                "Some items quantity in preparing list is greater than stock");
+                            return View();
+                        }
                         RequestDetail detail = new RequestDetail();
                         detail.Price = item.Item.Price;
                         detail.Quantity = item.Quantity;
@@ -100,10 +106,14 @@ namespace HMTStationery.Controllers
                     return View();
                 }
             }
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
-            context.Clients.User(request.User.Email).addNotification("You have applied a request success");
-            context.Clients.User(request.ReceiverEmail).addNotification("You have a new request applied by " + request.User.Name);
-
+            try
+            {
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                context.Clients.User(request.User.Email).addNotification("You have applied a request success");
+                context.Clients.User(request.ReceiverEmail).addNotification("You have a new request applied by " + request.User.Name);
+            }
+            catch (Exception)
+            { }
             return Redirect("/Employee/MyRequests");
         }
         //Check available email
@@ -220,7 +230,7 @@ namespace HMTStationery.Controllers
         {
             string email = GetUserEmail();
             int withdrawnStatus = (int)RequestStatus.WITHDRAWN;
-            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email&&x.Status!= withdrawnStatus)
+            List<Request> list = db.Requests.Where(x => x.ReceiverEmail == email && x.Status != withdrawnStatus)
                 .OrderByDescending(x => x.Date).ToList();
             return View(list);
         }
@@ -246,7 +256,7 @@ namespace HMTStationery.Controllers
             //Verify identity
             string email = GetUserEmail();
 
-            if (request.ReceiverEmail == email)
+            if (request.ReceiverEmail != email)
             {
                 ViewBag.Message = "You don't have permission to access another's request";
 
@@ -273,6 +283,14 @@ namespace HMTStationery.Controllers
                     }
                     db.SaveChanges();
                     ViewBag.Message = "Request approved successfully";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email).addNotification("Request with title " + request.Title + " have been approved");
+                        context.Clients.User(request.ReceiverEmail).addNotification("You have approved " + request.User.Name + "'s request");
+                    }
+                    catch (Exception)
+                    { }
                 }
                 catch (Exception)
                 {
@@ -292,7 +310,7 @@ namespace HMTStationery.Controllers
             //Verify identity
             string email = GetUserEmail();
 
-            if (request.ReceiverEmail == email)
+            if (request.ReceiverEmail != email)
             {
                 ViewBag.Message = "You don't have permission to access another's request";
 
@@ -306,6 +324,14 @@ namespace HMTStationery.Controllers
                     request.ResponseMessage = responseMessage;
                     db.SaveChanges();
                     ViewBag.Message = "Request rejected successfully";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email).addNotification("Request with title " + request.Title + " have been rejected");
+                        context.Clients.User(request.ReceiverEmail).addNotification("You have rejected " + request.User.Name + "'s request");
+                    }
+                    catch (Exception)
+                    { }
                 }
                 catch (Exception)
                 {
@@ -325,7 +351,7 @@ namespace HMTStationery.Controllers
             //Verify identity
             string email = GetUserEmail();
 
-            if (request.User.Email == email)
+            if (request.User.Email != email)
             {
                 ViewBag.Message = "You don't have permission to access another's request";
 
@@ -339,6 +365,14 @@ namespace HMTStationery.Controllers
 
                     db.SaveChanges();
                     ViewBag.Message = "Request withdrawn successfully";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email).addNotification("You have withdrawn a request success");
+
+                    }
+                    catch (Exception)
+                    { }
                 }
                 catch (Exception)
                 {
@@ -352,13 +386,13 @@ namespace HMTStationery.Controllers
         //Cancel Request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CancelRequest(int requestID)
+        public ActionResult CancelRequest(int requestID, string requestMessage)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
             string email = GetUserEmail();
 
-            if (request.User.Email == email)
+            if (request.User.Email != email)
             {
                 ViewBag.Message = "You don't have permission to access another's request";
 
@@ -369,9 +403,18 @@ namespace HMTStationery.Controllers
                 try
                 {
                     request.Status = (int)RequestStatus.WAITINGCANCEL;
+                    request.RequestMessage = requestMessage;
 
                     db.SaveChanges();
                     ViewBag.Message = "Successfully, Waiting for approving cancel from superior";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email).addNotification("You have a request success");
+                        context.Clients.User(request.ReceiverEmail).addNotification("A request applied by " + request.User.Name + " is requested for canceling");
+                    }
+                    catch (Exception)
+                    { }
                 }
                 catch (Exception)
                 {
@@ -385,14 +428,14 @@ namespace HMTStationery.Controllers
         //Cancel Request
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApproveCancelRequest(int requestID)
+        public ActionResult ApproveCancelRequest(int requestID, string responseMesage)
         {
             Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
             //Verify identity
             string email = GetUserEmail();
 
 
-            if (request.ReceiverEmail == email)
+            if (request.ReceiverEmail != email)
             {
                 ViewBag.Message = "You don't have permission to access another's request";
 
@@ -403,12 +446,65 @@ namespace HMTStationery.Controllers
                 try
                 {
                     request.Status = (int)RequestStatus.CANCELED;
+                    request.ResponseMessage = responseMesage;
                     foreach (RequestDetail item in request.RequestDetails)
                     {
                         item.Stationery.Stock += item.Quantity;
                     }
                     db.SaveChanges();
                     ViewBag.Message = "Request canceled successfully";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email).addNotification("Request with title " + request.Title + " have been canceled");
+                        context.Clients.User(request.ReceiverEmail).addNotification("You have approved canceling " + request.User.Name + "'s request");
+                    }
+                    catch (Exception)
+                    { }
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = "Failed, Unknown error";
+
+                }
+            }
+            return View("ToMeRequestDetail", request);
+        }
+
+        //Cancel Request
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RejectCancelRequest(int requestID, string responseMessage)
+        {
+            Request request = db.Requests.FirstOrDefault(x => x.ID == requestID);
+            //Verify identity
+            string email = GetUserEmail();
+
+
+            if (request.ReceiverEmail != email)
+            {
+                ViewBag.Message = "You don't have permission to access another's request";
+
+            }
+            //Handle request
+            else if (request.Status == (int)RequestStatus.WAITINGCANCEL)
+            {
+                try
+                {
+                    request.Status = (int)RequestStatus.REJECTEDFORCANCEL;
+                    request.ResponseMessage = responseMessage;
+                    db.SaveChanges();
+                    ViewBag.Message = "Request canceled successfully";
+                    try
+                    {
+                        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                        context.Clients.User(request.User.Email)
+                            .addNotification("Request with title " + request.Title + " have been rejected for canceling");
+                        context.Clients.User(request.ReceiverEmail)
+                            .addNotification("You have rejected for canceling " + request.User.Name + "'s request");
+                    }
+                    catch (Exception)
+                    { }
                 }
                 catch (Exception)
                 {
@@ -432,6 +528,11 @@ namespace HMTStationery.Controllers
                     .Contains(search.ToLower())).Take(20).ToList();
             }
             return View(list);
+        }
+        public ActionResult Report()
+        {
+
+            return View();
         }
         //View profile
         public ActionResult ViewProfile()

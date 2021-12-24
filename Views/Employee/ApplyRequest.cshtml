@@ -6,15 +6,16 @@
 }
 
 <h2>Apply Request</h2>
-
-<form action="#" class="form-contact">
-    <div class="card card-bordered">
-        <div class="card-header text-center">
-            <span>Enter request infomation</span>
-        </div>
-        <div class="card-inner">
-
+<div class="card card-bordered">
+    <div class="card-header text-center">
+        <span>Enter request infomation</span>
+    </div>
+    <div class="card-inner">
+        @using (Html.BeginForm("ApplyRequest", "Employee", FormMethod.Post, htmlAttributes: new { @id = "form-apply" }))
+        {
+            @Html.AntiForgeryToken()
             <div class="row g-4">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="col-12">
                     <div class="form-group">
                         @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
@@ -40,6 +41,7 @@
                             <div class="form-editor-custom">
                                 @Html.TextAreaFor(model => model.RequestMessage,
                                     htmlAttributes: new { @class = "form-control form-control-lg no-resize", @placeholder = "Write your message" })
+                                @Html.ValidationMessageFor(model => model.RequestMessage, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
@@ -47,34 +49,34 @@
 
 
             </div><!-- .row -->
-            @* Search box *@
-            <div class="nk-block-head wide-md nk-block-head-lg mt-2">
-                <div class="nk-block-head-content">
-                    <p>Find some stationeries to add to this request</p>
-                    <div class="nk-search-box">
-                        <div class="form-group">
-                            <div class="form-control-wrap d-flex">
-                                <input type="text" class="form-control form-control-lg col-md-10 col-sm-10 col-xs-10" id="searchBox" placeholder="Search...">
-                                <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
-                            </div>
-                            <div class="form-group" id="livesearch">
-
-                            </div>
+        }<!-- .form- -->
+        @* Search box *@
+        <div class="nk-block-head wide-md nk-block-head-lg mt-2">
+            <div class="nk-block-head-content">
+                <p>Find some stationeries to add to this request</p>
+                <div class="nk-search-box">
+                    <div class="form-group">
+                        <div class="form-control-wrap d-flex">
+                            <input type="text" class="form-control form-control-lg col-md-10 col-sm-10 col-xs-10" id="searchBox" placeholder="Search...">
+                            <button class="form-control btn btn-primary clear-search"><em class="icon ni ni-trash-empty-fill"></em>Clear search</button>
+                        </div>
+                        <div class="form-group " id="livesearch">
                         </div>
                     </div>
                 </div>
-            </div><!-- .nk-block-head -->
-            @* Preparing table *@
-            <h3>Chosen stationeries</h3>
-            <div id="chosen-stationeries"></div>
+            </div>
+        </div><!-- .nk-block-head -->
+        @* Preparing table *@
+        <h3>Chosen stationeries</h3>
+        <div id="chosen-stationeries"></div>
+        <hr />
+        <div class=" d-flex justify-center col-12 mt-5" >
+            <button class="btn btn-primary col-md-6 " type="submit" form="form-apply"><span>Apply Request</span></button>
+        </div><!-- .col -->
 
-            <div class="col-12 mt-3">
-                <a href="#" class="btn btn-primary btn-block">Apply Request</a>
-            </div><!-- .col -->
+    </div><!-- .card-inner -->
+</div><!-- .card -->
 
-        </div><!-- .card-inner -->
-    </div><!-- .card -->
-</form><!-- .form- -->
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -82,6 +84,8 @@
 @section scripts
 {
     <script type="text/javascript">
+
+
         $(document).ready(function () {
 
             //Add Eventlistener for changing staionery quantity
@@ -104,6 +108,10 @@
                         e.target.value = txtQuantity;
                     } else {
                         refreshChosenStationeryList();
+                        toastr.clear();
+                        NioApp.Toast('Updated  preparing list.', 'info', {
+                            position: 'top-center'
+                        });
                     }
                 })
             });
@@ -123,6 +131,10 @@
                     }
                 }).done(function (data) {
                     refreshChosenStationeryList();
+                    toastr.clear();
+                    NioApp.Toast('Removed item from preparing list.', 'info', {
+                        position: 'top-center'
+                    });
                 })
             });
             //Add Eventlistener for searching staioneries
@@ -138,7 +150,10 @@
                     }
                 }).done(function () {
                     refreshChosenStationeryList();
-
+                    toastr.clear();
+                    NioApp.Toast('Added to preparing list.', 'info', {
+                        position: 'top-center'
+                    });
                 });
             });
 
@@ -167,11 +182,11 @@
                             name: txtName
                         },
                         beforeSend: function () {
-                            $('#livesearch').html(`<div class="d-flex justify-content-center">
-                                                                                              <div class="spinner-border" role="status">
-                                                                                                <span class="sr-only">Loading...</span>
-                                                                                              </div>
-                                                                                            </div>`);
+                            $('#livesearch').html(`<div class="text-center">
+                                                      <div class="spinner-border" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                      </div>
+                                                   </div>`);
                         },
                     }).done(function (data) {
                         $('#livesearch').html(data);

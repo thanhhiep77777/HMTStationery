@@ -126,10 +126,10 @@ namespace HMTStationery.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Employee");
         }
-        //public ActionResult TestPassword(string email, string pass)
-        //{
-        //    return Content(EncryptPassword(pass, email));
-        //}
+        public ActionResult TestPassword(string email, string pass)
+        {
+            return Content(EncryptPassword(pass, email));
+        }
         public static string EncryptPassword(string password, string saltorusername)
         {
             using (var sha256 = SHA256.Create())

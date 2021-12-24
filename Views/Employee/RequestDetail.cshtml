@@ -166,7 +166,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="requestID" value="@Model.ID" />
-
+                       
                         <ul class="align-center flex-wrap g-3">
                             <li>
                                 <button class="btn btn-warning" type="submit">Withdraw request</button>
@@ -197,7 +197,12 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="requestID" value="@Model.ID" />
 
-                       
+                        <div class="form-group">
+                            <label class="form-label">Response a message to @Model.ReceiverEmail</label>
+                            <div class="form-control-wrap">
+                                <input type="text" required name="requestMessage" class="form-control">
+                            </div>
+                        </div>
 
                         <ul class="align-center flex-wrap g-3">
                             <li>
