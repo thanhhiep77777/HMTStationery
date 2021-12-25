@@ -31,7 +31,7 @@
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
 <div class="nk-block">
-    <div class="row g-gs stationery-list">
+    <div class="row g-gs " id="stationery-list">
         @foreach (var item in Model)
         {
            
@@ -72,7 +72,8 @@
 {
      <script type="text/javascript">
          $(document).ready(function () {
-             $(".stationery-list").on("click", ".add-stationery", function (e) {
+             $("#stationery-list").on("click", ".add-stationery", function (e) {
+                 e.preventDefault();
                  let txtID = e.target.dataset.id;
                  $.ajax({
                      url: '/Employee/_AddStationery?id=' + txtID,

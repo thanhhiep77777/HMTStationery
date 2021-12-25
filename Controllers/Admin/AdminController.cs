@@ -17,6 +17,8 @@ namespace HMTStationery.Controllers.Admin
 
             ViewBag.UserNumber = db.Users.Count();
             ViewBag.StationeryNumber = db.Stationeries.Count();
+            ViewBag.QANumber = db.QAs.Count();
+            
             return View();
         }
     }

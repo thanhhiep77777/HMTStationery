@@ -53,9 +53,7 @@
                             <div class="nk-tb-col tb-col-xl">
                                 <span>@Html.DisplayFor(modelItem => item.Stock)</span>
                             </div>
-                            <div class="nk-tb-col tb-col-xl">
-                                <span>@(item.Description.Length>20?item.Description.Substring(0,20)+"...":item.Description)</span>
-                            </div>
+                            
                             <div class="nk-tb-col tb-col-md">
                                 <span class="tb-status ">@((StationeryStatus)item.Status)</span>
                             </div>

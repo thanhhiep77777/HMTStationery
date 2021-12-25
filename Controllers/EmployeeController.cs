@@ -108,6 +108,7 @@ namespace HMTStationery.Controllers
 
                     db.Requests.Add(request);
                     db.SaveChanges();
+                    Session.Remove("prepare");
 
                 }
                 catch (Exception)
