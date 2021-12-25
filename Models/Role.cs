@@ -11,7 +11,8 @@ namespace HMTStationery.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +22,10 @@ namespace HMTStationery.Models
         }
     
         public int ID { get; set; }
+        [Required(ErrorMessage = "Please enter Role name")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Please enter Description")]
+
         public string Description { get; set; }
         public Nullable<double> Eligibility { get; set; }
     

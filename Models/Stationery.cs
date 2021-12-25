@@ -30,7 +30,7 @@ namespace HMTStationery.Models
         public string Image { get; set; }
         [Required(ErrorMessage = "Please enter stock number")]
         public Nullable<int> Stock { get; set; }
-
+        [Required(ErrorMessage ="Please enter description")]
         public string Description { get; set; }
         public Nullable<int> Status { get; set; } = 1;
         public string Unit { get; set; }

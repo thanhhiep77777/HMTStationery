@@ -46,11 +46,7 @@ namespace HMTStationery.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Create(Stationery objStat)
         {
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(StationeryStatus)).Cast<StationeryStatus>().Select(v => new SelectListItem
-            {
-                Text = v.ToString(),
-                Value = ((int)v).ToString()
-            }).ToList(), "Value", "Text",objStat.Status);
+            
             if (ModelState.IsValid)
             {
                 HttpPostedFileBase postedfile = objStat.ImageUpload;

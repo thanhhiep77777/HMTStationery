@@ -11,13 +11,16 @@ namespace HMTStationery.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class QA
     {
         public int ID { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        [Required(ErrorMessage ="Please enter question")]
         public string Question { get; set; }
+        [Required(ErrorMessage = "Please enter answer")]
         public string Answer { get; set; }
         public Nullable<int> Status { get; set; }
     
