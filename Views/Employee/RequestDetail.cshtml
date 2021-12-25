@@ -100,9 +100,7 @@
                     <th class="tb-tnx-info">
                         Name
                     </th>
-                    <th class="tb-tnx-info">
-                        Description
-                    </th>
+                   
                     <th class="tb-tnx-info">
                         Image
                     </th>
@@ -122,24 +120,19 @@
                 {
                     <tr class="tb-tnx-item">
                         <td class="tb-tnx-info">
+                            <a href="/Employee/StationeryDetail/@item.Stationery.ID" target="_blank"></a>
                             @item.Stationery.Name
-                        </td>
-                        <td class="tb-tnx-info">
-                            @(item.Stationery.Description.Length>30?
-                                item.Stationery.Description.Substring(0,30)+"...":
-                                item.Stationery.Description
-                            )
-                        </td>
+                        </td>                 
                         <td class="tb-tnx-info">
                             <img src="~/Storage/Images/@item.Stationery.Image" alt="Stationery Image" height="150" />
                         </td>
                         <td class="tb-tnx-info">
                             $@item.Price
                         </td>
-                        <td class="tb-tnx-info">
+                        <td class="tb-tnx-info text-center">
                             @item.Quantity
                         </td>
-                        <td class="tb-tnx-info">
+                        <td class="tb-tnx-info text-center">
                             $@(item.Quantity*item.Price)
                         </td>
                     </tr><!-- .tb-tnx-item -->

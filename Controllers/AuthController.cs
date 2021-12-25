@@ -112,6 +112,18 @@ namespace HMTStationery.Controllers
         }
         public ActionResult AccessDenied()
         {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = claimsIdentity.Claims;
+            string role = claims.Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).SingleOrDefault();
+            if (role == "Admin")
+            {
+                ViewBag.RoleScreen = "/Admin";
+            }
+            else
+            {
+                ViewBag.RoleScreen = "/";
+            }
             return View();
         }
         public ActionResult Logout()

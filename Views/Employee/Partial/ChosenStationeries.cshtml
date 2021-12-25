@@ -6,7 +6,7 @@
             @Html.DisplayNameFor(model => model.Stationery.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Stationery.Description)
+            @Html.DisplayNameFor(model => model.Stationery.Image)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
@@ -26,7 +26,7 @@
             @Html.DisplayFor(modelItem => item.Stationery.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Stationery.Description)
+            <img src="~/Storage/Images/@item.Stationery.Image" width="250"/>
         </td>
         <td>
             $@Html.DisplayFor(modelItem => item.Price)

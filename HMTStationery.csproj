@@ -398,6 +398,7 @@
     <Content Include="Views\Employee\Stationeries.cshtml" />
     <Content Include="Views\Employee\TestSignalR.cshtml" />
     <Content Include="Views\Employee\StationeryDetail.cshtml" />
+    <Content Include="Views\Employee\QADetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\Index.cshtml" />

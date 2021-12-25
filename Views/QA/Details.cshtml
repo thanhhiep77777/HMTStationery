@@ -35,7 +35,7 @@
             <textarea class="form-group" name="Answer">@Model.Answer</textarea>
         </dd>
 
-       
+
 
     </dl>
 </div>
@@ -45,7 +45,10 @@
 </p>
 @section scripts{
     <script type="text/javascript">
+        CKEDITOR.config.readOnly = true;
+
         CKEDITOR.replace('Answer');
+
     </script>
 
 }

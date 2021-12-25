@@ -35,11 +35,25 @@ namespace HMTStationery.Controllers
         {
             return View();
         }
-        public ActionResult QA()
+        public ActionResult QA(string search)
         {
-            return View();
+            List<QA> QAs;
+                if (string.IsNullOrEmpty(search))
+            {
+                QAs= db.QAs.ToList();
+            }
+            else
+            {
+                QAs = db.QAs.Where(x=>x.Question.ToLower().Contains(search.ToLower())).ToList();
+            }
+              
+            return View(QAs);
         }
-
+        public ActionResult QADetail(int ID)
+        {
+            QA model = db.QAs.FirstOrDefault(x=>x.ID==ID);
+            return View(model);
+        }
         public ActionResult ApplyRequest()
         {
             ViewBag.Prepare = (List<PreparingStationery>)Session["prepare"];

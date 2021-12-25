@@ -1,0 +1,27 @@
+﻿@model HMTStationery.Models.QA
+
+@{
+    ViewBag.Title = "QADetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nk-content-wrap">
+    <div class="nk-block-head wide-md nk-block-head-lg">
+        <a href="/Employee/QA"><div class="nk-block-head-sub"><span>Q&A</span></div></a>
+
+        <div class="nk-block-head-content">
+            <h2 class="nk-block-title fw-normal">@Model.Question</h2>
+            
+        </div>
+    </div><!-- .nk-block-head -->
+    <div class="nk-block">
+        <div class="card card-bordered"> 
+            @Html.Raw(Model.Answer)
+        </div>
+      
+    </div><!-- .nk-block -->
+
+</div>
+
+
+
